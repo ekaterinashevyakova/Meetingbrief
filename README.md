@@ -3,6 +3,13 @@
 An AI-powered meeting preparation assistant being developed for
 Global AI Hackathon 2026 by a team of four.
 
+## Live demo
+
+https://meetingbrief.streamlit.app/ 
+
+The demo uses fictional data. Live research and AI generation
+are not connected yet.
+
 ## Project goal
 
 Given a company or person and a scheduled meeting time, generate
