@@ -11,11 +11,20 @@ a concise briefing covering relevant developments from the preceding
 
 ## Current status
 
-The initial Streamlit interface is implemented.
+The Streamlit frontend is implemented with fictional demonstration data.
 
-Users can enter meeting details and view a placeholder briefing.
-Live web research and AI generation are not connected yet.
-Displayed placeholders are not factual research findings.
+Implemented features:
+- Company and person input modes with contextual field labels
+- Meeting date, time, time zone and objective
+- Required-name validation
+- Structured briefing display with events and source excerpts
+- Preservation and clearing of the last generated briefing
+- Empty-result and generation-error handling
+
+Live Tavily research and model access through Bifrost are not connected yet.
+
+See INTEGRATION.md for the request and response format.
+See TESTING.md for manual checks and remaining validation.
 
 ## Planned technology stack
 
