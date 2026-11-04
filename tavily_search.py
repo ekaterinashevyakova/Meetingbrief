@@ -29,7 +29,7 @@ def search_sources(request):
 
     # Не ищем события из будущего, даже если встреча назначена на будущее.
     end_date = min(meeting_date, date.today())
-    start_date = end_date - timedelta(days=90)
+    start_date = end_date - timedelta(days=30)
 
     query = f'"{name}" {entity_type} recent news developments'
     if details:
