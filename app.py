@@ -6,75 +6,124 @@ st.title("MeetingBrief")
 st.write("Prepare for your meeting with a concise, source-backed briefing.")
 st.info("Demo mode. Web research and AI are not connected yet.")
 
-with st.form("meeting_form"):
-    entity_type = st.radio(
-        "Who are you meeting?",
-        ["Company", "Person"],
-    )
+if "briefing" not in st.session_state:
+    st.session_state.briefing = None
 
-    name = st.text_input("Company name or person's name")
+entity_type = st.radio(
+    "Who are you meeting?",
+    ["Company", "Person"],
+    horizontal=True,
+)
+
+is_company = entity_type == "Company"
+
+with st.form(f"meeting_form_{entity_type}"):
+    name = st.text_input(
+        "Company name" if is_company else "Full name",
+        placeholder="e.g. IKEA" if is_company else "e.g. Jane Smith",
+    )
 
     details = st.text_input(
-        "Company website or person's role (optional)"
+        "Company website (optional)"
+        if is_company
+        else "Company or role (optional)",
+        placeholder="e.g. https://www.ikea.com"
+        if is_company
+        else "e.g. Marketing Director at Example Company",
     )
 
-    meeting_date = st.date_input("Meeting date")
-    meeting_time = st.time_input("Meeting time")
+    date_column, time_column = st.columns(2)
+
+    with date_column:
+        meeting_date = st.date_input("Meeting date")
+
+    with time_column:
+        meeting_time = st.time_input("Meeting time")
 
     timezone = st.selectbox(
         "Time zone",
         ["Europe/Rome", "Europe/Moscow", "UTC"],
     )
 
-    goal = st.text_area("Meeting objective (optional)")
+    goal = st.text_area(
+        "Meeting objective (optional)",
+        placeholder="e.g. Discuss a potential partnership",
+    )
 
-    submitted = st.form_submit_button("Generate briefing")
+    submitted = st.form_submit_button(
+        "Generate briefing",
+        type="primary",
+    )
 
 if submitted:
     if not name.strip():
-        st.warning("Please enter a company name or person's name.")
+        field_name = "a company name" if is_company else "a person's name"
+        st.warning(f"Please enter {field_name}.")
     else:
-        st.subheader(f"Meeting briefing: {name.strip()}")
+        st.session_state.briefing = {
+            "entity_type": entity_type,
+            "name": name.strip(),
+            "details": details.strip(),
+            "meeting_date": meeting_date,
+            "meeting_time": meeting_time,
+            "timezone": timezone,
+            "goal": goal.strip(),
+        }
 
-        st.write(
-            f"Meeting: {meeting_date:%d %b %Y}, "
-            f"{meeting_time:%H:%M} · {timezone}"
-        )
+briefing = st.session_state.briefing
 
-        if goal.strip():
-            st.write(f"Objective: {goal.strip()}")
+if briefing is not None:
+    st.divider()
+    st.subheader(f"Meeting briefing: {briefing['name']}")
 
-        st.caption(
-            "Preview only. The sections below contain placeholders, "
-            "not research findings."
-        )
+    st.caption(
+        "Last generated preview. Form edits apply when you click "
+        "Generate briefing. All content below is demonstrative."
+    )
 
-        st.markdown("### At a glance")
-        st.write("A short summary of relevant findings will appear here.")
+    st.write(f"Meeting with: {briefing['entity_type']}")
 
-        st.markdown("### Recent developments")
-        st.write(
-            "Recent events will appear here with dates "
-            "and references to supporting sources."
-        )
+    if briefing["details"]:
+        st.write(f"Additional context: {briefing['details']}")
 
-        st.markdown("### Questions to ask")
-        st.write(
-            "General example question: "
-            "What are your team's current priorities?"
-        )
+    st.write(
+        f"Meeting: {briefing['meeting_date']:%d %b %Y}, "
+        f"{briefing['meeting_time']:%H:%M} · {briefing['timezone']}"
+    )
 
-        st.markdown("### Conversation starters")
-        st.write(
-            "Suggestions tailored to the research "
-            "and your meeting objective will appear here."
-        )
+    if briefing["goal"]:
+        st.write(f"Objective: {briefing['goal']}")
 
-        st.markdown("### Information gaps")
-        st.write(
-            "No research has been performed. "
-            "This is an interface demonstration."
-        )
+    st.markdown("### At a glance")
+    st.write("A short summary of relevant findings will appear here.")
 
-        st.markdown("### Sources")
-        st.write("No sources retrieved yet.")
+    st.markdown("### Recent developments")
+    st.write(
+        "Recent events will appear here with dates "
+        "and references to supporting sources."
+    )
+
+    st.markdown("### Questions to ask")
+    st.write(
+        "General example question: "
+        "What are your team's current priorities?"
+    )
+
+    st.markdown("### Conversation starters")
+    st.write(
+        "Suggestions tailored to the research "
+        "and your meeting objective will appear here."
+    )
+
+    st.markdown("### Information gaps")
+    st.write(
+        "No research has been performed. "
+        "This is an interface demonstration."
+    )
+
+    st.markdown("### Sources")
+    st.write("No sources retrieved yet.")
+
+    if st.button("Clear briefing"):
+        st.session_state.briefing = None
+        st.rerun()
