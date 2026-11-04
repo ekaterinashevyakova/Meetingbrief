@@ -23,3 +23,4 @@ They do not validate live research or factual accuracy.
 - Run setup instructions on another team member's computer.
 - Test the full Tavily and Bifrost integration.
 - Review real claims, citations, entity relevance and dates.
+- Markdown export includes all three demo events.

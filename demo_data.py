@@ -24,7 +24,38 @@ def generate_briefing(request):
                     "Ask which customer needs the tool is intended "
                     "to address."
                 ),
-            }
+            },            
+            {
+                "title": "Example partnership announcement",
+                "date": None,
+                "description": (
+                    "In this fictional scenario, a company announced "
+                    "a pilot partnership to explore a new customer segment. "
+                    "The available example material does not specify "
+                    "the pilot duration, budget, or success criteria. "
+                    "This is invented content for layout testing."
+                ),
+                "source_ids": ["S1"],
+                "discussion_point": (
+                    "Ask how the team would define a successful pilot."
+                ),
+            },
+            {
+                "title": (
+                    "Example of a longer event title describing "
+                    "an expansion into a new market"
+                ),
+                "date": None,
+                "description": (
+                    "This fictional event tests how longer titles "
+                    "and descriptions wrap inside a briefing card. "
+                    "It is not a finding about the requested entity."
+                ),
+                "source_ids": ["S1"],
+                "discussion_point": (
+                    "Ask which market-entry assumptions need validation."
+                ),
+            },
         ],
         "questions": [
             "What are your team's current priorities?",
