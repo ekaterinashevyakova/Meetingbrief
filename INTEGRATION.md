@@ -113,3 +113,26 @@ validation remain responsibilities of the research workflow.
 
 Use fictional demo_data.py content.
 Do not add real API keys to frontend files.
+
+## Research timing
+
+The interface displays the requested window as the 30 days before
+the scheduled meeting. This label does not prove that retrieved
+sources meet the date requirements.
+
+The backend remains responsible for filtering sources and events.
+
+The response may include this additional field:
+
+    "researched_at": "2026-11-04T13:00:00+01:00"
+
+This optional ISO 8601 timestamp must include a UTC offset and
+represent the actual research collection time.
+
+If omitted, the interface displays "Not provided".
+Demo responses always display "Not performed — fictional demo".
+
+If collection occurred before the meeting, the interface warns that
+developments after collection are not covered.
+
+The timestamp indicates collection time, not factual verification.

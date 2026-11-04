@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
@@ -73,6 +73,56 @@ def validate_result(result):
         if any(not isinstance(item, str) for item in result[key]):
             raise ValueError(f"Invalid text in {key}.")
 
+def research_context(request, result):
+    meeting = datetime.fromisoformat(request["meeting_datetime"])
+    window_start = meeting - timedelta(days=30)
+
+    lines = [
+        (
+            "Requested research window: "
+            f"{window_start:%d %b %Y, %H:%M} to "
+            f"{meeting:%d %b %Y, %H:%M} "
+            f"({request['timezone']})"
+        )
+    ]
+
+    if result["is_demo"]:
+        lines.append(
+            "Research collected at: Not performed — fictional demo."
+        )
+        return lines
+
+    collected_at = result.get("researched_at")
+
+    if not collected_at:
+        lines.append("Research collected at: Not provided.")
+        return lines
+
+    try:
+        collected = datetime.fromisoformat(collected_at)
+
+        if collected.tzinfo is None:
+            raise ValueError("Research timestamp must include a time zone.")
+
+        collected = collected.astimezone(ZoneInfo(request["timezone"]))
+
+        lines.append(
+            f"Research collected at: {collected:%d %b %Y, %H:%M} "
+            f"({request['timezone']})"
+        )
+
+        if collected < meeting:
+            lines.append(
+                "Coverage note: The requested window extends beyond "
+                "the collection time. Later developments are not covered."
+            )
+
+    except (TypeError, ValueError):
+        lines.append(
+            "Research collected at: Unavailable — invalid timestamp."
+        )
+
+    return lines
 
 def export_briefing(request, result):
     meeting = datetime.fromisoformat(request["meeting_datetime"])
@@ -93,6 +143,7 @@ def export_briefing(request, result):
         f"Meeting with: {request['entity_type'].title()}",
         f"Context: {request['details'] or 'Not provided'}",
         f"Objective: {request['goal'] or 'Not provided'}",
+        *research_context(request, result),
         "",
         "## At a glance",
         result["summary"],
@@ -164,6 +215,9 @@ def render_briefing(request, result):
         st.write(f"**Meeting objective:** {request['goal']}")
     if request["details"]:
         st.write(f"**Context:** {request['details']}")
+
+    for line in research_context(request, result):
+        st.caption(line)    
 
     st.caption(
         "Showing the last generated briefing. "
