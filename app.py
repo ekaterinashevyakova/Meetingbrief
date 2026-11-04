@@ -196,6 +196,12 @@ def export_briefing(request, result):
     return "\n\n".join(lines)
 
 
+def reset_meeting():
+    """Reset meeting inputs and the generated briefing."""
+    st.session_state.briefing = None
+    st.session_state.form_version += 1
+
+
 def render_briefing(request, result):
     meeting = datetime.fromisoformat(request["meeting_datetime"])
 
@@ -217,7 +223,7 @@ def render_briefing(request, result):
         st.write(f"**Context:** {request['details']}")
 
     for line in research_context(request, result):
-        st.caption(line)    
+        st.caption(line)
 
     st.caption(
         "Showing the last generated briefing. "
@@ -278,18 +284,24 @@ def render_briefing(request, result):
             st.write(source.get("excerpt") or "No excerpt provided.")
             st.divider()
 
-    st.download_button(
-        "Download briefing (.md)",
-        data=export_briefing(request, result),
-        file_name="meetingbrief-demo.md"
-        if result["is_demo"]
-        else "meetingbrief.md",
-        mime="text/markdown",
-    )
+    download_column, reset_column = st.columns(2)
 
-    if st.button("Clear briefing"):
-        st.session_state.briefing = None
-        st.rerun()
+    with download_column:
+        st.download_button(
+            "Download briefing (.md)",
+            data=export_briefing(request, result),
+            file_name="meetingbrief-demo.md"
+            if result["is_demo"]
+            else "meetingbrief.md",
+            mime="text/markdown",
+        )
+
+    with reset_column:
+        st.button(
+            "Reset meeting",
+            on_click=reset_meeting,
+            help="Clear the briefing and reset all meeting fields.",
+        )
 
 
 st.title("MeetingBrief")
@@ -303,6 +315,9 @@ st.info("Demo mode · Live web research and AI are not connected yet.")
 if "briefing" not in st.session_state:
     st.session_state.briefing = None
 
+if "form_version" not in st.session_state:
+    st.session_state.form_version = 0
+
 form_column, result_column = st.columns([2, 3], gap="large")
 
 with form_column:
@@ -312,14 +327,30 @@ with form_column:
         "Who are you meeting?",
         ["Company", "Person"],
         horizontal=True,
+        key=f"entity_type_{st.session_state.form_version}",
     )
     is_company = entity_type == "Company"
 
-    with st.form(f"meeting_form_{entity_type}"):
+    form_key = f"meeting_form_{entity_type}_{st.session_state.form_version}"
+
+    with st.form(form_key):
         name = st.text_input(
             "Company name" if is_company else "Full name",
-            placeholder="e.g. IKEA" if is_company else "e.g. Jane Smith",
+            placeholder="e.g. Inter IKEA Systems B.V."
+            if is_company
+            else "e.g. Jane Smith",
         )
+        if is_company:
+            st.caption(
+                "Use the specific organization name. Add its website "
+                "to help distinguish similar names."
+            )
+        else:
+            st.caption(
+                "Add the person's company or role to help distinguish "
+                "people with similar names."
+            )
+
         details = st.text_input(
             "Company website (optional)"
             if is_company
@@ -332,6 +363,11 @@ with form_column:
         meeting_date = st.date_input(
             "Meeting date",
             format="DD/MM/YYYY",
+            help=(
+                "Past dates are allowed for historical briefings. "
+                "Research must exclude information published "
+                "after the meeting."
+            ),
         )
         meeting_time = st.time_input("Meeting time")
         timezone = st.selectbox(

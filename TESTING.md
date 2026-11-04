@@ -9,7 +9,7 @@ They do not validate live research or factual accuracy.
 - Company / Person selection changes field labels.
 - Submitted meeting details appear in the briefing.
 - The previous briefing remains when switching entity type.
-- Clear briefing removes the displayed result.
+- Reset meeting removes the displayed result.
 - A structured demo response displays events, questions and sources.
 - Source details expand to show the supporting excerpt.
 - An empty response displays appropriate messages without old events.
