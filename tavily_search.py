@@ -179,8 +179,8 @@ def search_sources(request):
             continue
         seen_urls.add(clean_url)
 
-        excerpt = str(item.get("content", "")).strip()
-        article_text = str(item.get("raw_content", "")).strip()
+        excerpt = str(item.get("content") or "").strip()
+article_text = str(item.get("raw_content") or "").strip()
 
         if not excerpt and article_text:
             excerpt = article_text[:1000]
@@ -197,7 +197,7 @@ def search_sources(request):
         sources.append(
             {
                 "id": f"S{len(sources) + 1}",
-                "title": str(item.get("title", "")).strip() or "Untitled source",
+                "title": str(item.get("title") or "").strip() or "Untitled source",
                 "url": clean_url,
                 "excerpt": excerpt,
 "published_date": normalized_published_date,
