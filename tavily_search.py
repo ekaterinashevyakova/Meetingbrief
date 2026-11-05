@@ -180,7 +180,7 @@ def search_sources(request):
         seen_urls.add(clean_url)
 
         excerpt = str(item.get("content") or "").strip()
-article_text = str(item.get("raw_content") or "").strip()
+        article_text = str(item.get("raw_content") or "").strip()
 
         if not excerpt and article_text:
             excerpt = article_text[:1000]
