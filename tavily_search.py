@@ -8,7 +8,7 @@ from tavily import TavilyClient
 
 
 def _parse_published_date(value, local_timezone):
-    """Возвращает (точное время публикации, календарную дату)."""
+    """Разбирает дату Tavily; она может относиться к публикации или обновлению."""
     if not value:
         return None, None
 
@@ -135,7 +135,8 @@ def search_sources(request):
             continue
 
         if published_at is not None:
-            # Точное время есть: проверяем обе временные границы.
+            # Tavily вернул время, но оно может относиться к обновлению страницы.
+# Используем его только для консервативного временного фильтра.
             if published_at < window_start or published_at > search_cutoff:
                 continue
         else:
@@ -199,7 +200,10 @@ def search_sources(request):
                 "title": str(item.get("title", "")).strip() or "Untitled source",
                 "url": clean_url,
                 "excerpt": excerpt,
-                "published_date": normalized_published_date,
+                "published_date_note": (
+    "Tavily date estimate; may represent original publication or a later "
+    "update. Do not use it alone to infer relative event dates such as 'today'."
+),
                 # Текст статьи нужен модели для проверки даты события
                 # и соответствия материала выбранной организации.
                 "article_text": article_text or excerpt,
