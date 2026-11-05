@@ -201,7 +201,7 @@ def search_sources(request):
                 "url": clean_url,
                 "excerpt": excerpt,
                 "published_date": normalized_published_date,
-                "published_date_note": (
+                "published_date_note": ( 
     "Tavily date estimate; may represent original publication or a later "
     "update. Do not use it alone to infer relative event dates such as 'today'."
 ),
