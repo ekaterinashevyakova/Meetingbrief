@@ -18,21 +18,6 @@ meeting either as a dataset case or directly:
 
 With `--case`, the case's `expected_facts` and `must_not_contain` are used too.
 
-## Testing a teammate's branch without merging it
-
-Check the branch out into a separate folder with `git worktree`, then point
-`--repo` at it. Your own branch stays untouched.
-
-    git fetch origin
-    git worktree add ../mb-bifrost origin/marina/bifrost
-    python -m pip install -r ../mb-bifrost/requirements.txt
-    # put .env with BIFROST_* and TAVILY_API_KEY into ../mb-bifrost
-    python testing/run_eval.py --repo ../mb-bifrost --backend briefing_generator
-
-    git worktree remove ../mb-bifrost                            # when done
-
-The response contract is always checked with `validate_result()` from this
-checkout's `app.py`, whichever repository the backend comes from.
 
 ## Checks
 
@@ -68,4 +53,3 @@ that state a fact or a guess instead of a limitation).
 Offline, no keys. Tests marked xfail document known backend gaps; when one
 starts passing, remove its marker.
 
-The demo backend is expected to fail every case.
