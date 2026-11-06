@@ -1,12 +1,12 @@
 [
   {
     "id": "test_001",
-    "description": "Well-known person, investment meeting. Recent financial news should surface.",
+    "description": "Well-known company, investment meeting. Recent financial news and legal developments should surface.",
     "request": {
-      "entity_type": "person",
-      "name": "Sam Altman",
-      "details": "CEO of OpenAI",
-      "meeting_datetime": "2026-11-09T10:00:00+01:00",
+      "entity_type": "company",
+      "name": "OpenAI",
+      "details": "Artificial intelligence research laboratory",
+      "meeting_datetime": "2026-11-08T10:00:00+01:00",
       "timezone": "Europe/Rome",
       "goal": "Potential investment"
     },
@@ -19,24 +19,74 @@
       },
       {
         "fact": "OpenAI's forecast for this year is $50bn, $50bn less than promised a month earlier.",
-        "kind": "background",
+        "kind": "recent",
         "date": "2026-10-09",
         "importance": 0.8,
         "source": "https://www.theguardian.com/technology/2026/oct/09/openai-forecast-revenue-gap"
       },
       {
-        "fact": "Anthropic, OpenAI's main competitor, has reached a higher valuation than OpenAI.",
-        "kind": "background",
-        "date": "2026-05-28",
+        "fact": "An ⁠OpenAI employee who left the ChatGPT maker for Apple sent more than 100 files about an unreleased product to a personal ⁠account and later ⁠made a presentation ​about the unreleased product to senior Apple leadership, a new filing in the lawsuit between OpenAI and Apple alleges.",
+        "kind": "recent",
+        "date": "2026-10-14",
         "importance": 0.9,
-        "source": "https://www.theguardian.com/technology/2026/may/28/anthropic-ai-valuation"
+        "source": [
+          {
+            "title": "OpenAI accuses employee who left for Apple of leaking plans for unreleased device",
+            "url": "https://www.theguardian.com/technology/2026/oct/14/openai-apple-employee-leak-lawsuit"
+          }
+        ]
       },
       {
         "fact": "OpenAI is not profitable.",
-        "kind": "background",
+        "kind": "recent",
+        "date": "2026-11-01",
         "importance": 0.85,
-        "source": "https://newmarketpitch.com/blogs/news/frontier-ai-labs-openai-profitability"
+        "source": [
+          {
+            "title": "Can OpenAI ever become profitable?",
+            "url": "https://newmarketpitch.com/blogs/news/frontier-ai-labs-openai-profitability"
+          }
+        ]
+      },
+      {
+        "fact": "OpenAI is worth around $1.1T today.",
+        "kind": "recent",
+        "date": "2026-10-21",
+        "importance": 0.9,
+        "source": [
+          {
+            "title": "How much is OpenAI worth today?",
+            "url": "https://www.theguardian.com/technology/2026/nov/02/openai-seeks-to-raise-10bn-in-new-funding-round"
+          }
+        ]
+      },
+      {
+        "fact": "OpenAI has been accused of misleading investors about its financial performance.",
+        "kind": "recent",
+        "date": "2026-11-02",
+        "importance": 0.95,
+        "source": [
+          {
+            "title": "OpenAI accused of misleading investors about financial performance",
+            "url": "https://www.theguardian.com/technology/2026/nov/02/openai-accused-of-misleading-investors-about-financial-performance"
+          }
+        ]
+      },
+      {
+        "fact": "Datacentres are unpopular so OpenAI is rebranding them.",
+        "kind": "recent",
+        "date": "2026-11-03",
+        "importance": 0.7,
+        "source": [
+          {
+            "title": "Datacentres are deeply unpopular – so the geniuses at OpenAI are rebranding them",
+            "url": "https://www.theguardian.com/commentisfree/2026/nov/03/datacentres-are-deeply-unpopular-so-the-geniuses-at-openai-are-rebranding-them"
+          }
+        ]
       }
+    ],
+    "expected_gaps": [
+      "The outcome of the legal disputes (the Apple lawsuit and the accusations of misleading investors) is not yet known."
     ],
     "must_not_contain": ["Disney", "E! Networks"]
   },
@@ -65,6 +115,10 @@
         "source": "https://www.linkedin.com/in/samaltman/"
       }
     ],
+    "expected_gaps": [
+      "The name is ambiguous: a much better-known Sam Altman (CEO of OpenAI) exists, so sources must be checked to refer to the Disney ABC marketing director.",
+      "Little or no recent public news about this person was found in the research window."
+    ],
     "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
   },
   {
@@ -88,9 +142,13 @@
       {
         "fact": "Previously worked at E! Networks, then ABC.",
         "kind": "background",
-        "importance": 0.8,
+        "importance": 0.1,
         "source": "https://www.linkedin.com/in/samaltman/"
       }
+    ],
+    "expected_gaps": [
+      "The name is ambiguous: a much better-known Sam Altman (CEO of OpenAI) exists, so sources must be checked to refer to the Disney ABC marketing director.",
+      "Little or no recent public news about this person was found in the research window."
     ],
     "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
   },
@@ -99,13 +157,66 @@
     "description": "Fictional company that does not exist. The agent must not invent events and should explain the gap.",
     "request": {
       "entity_type": "company",
-      "name": "Zelvantrix Harbor Analytics",
+      "name": "Zelviantrix Harbor Analytics",
       "details": "",
       "meeting_datetime": "2026-11-12T15:00:00+01:00",
       "timezone": "Europe/Rome",
       "goal": "Discuss a potential partnership"
     },
     "expected_facts": [],
+    "expected_gaps": [
+      "No sources were found for this company; this does not prove that it does not exist or that nothing happened."
+    ],
     "expect_no_events": true
+  },
+  {
+    "id": "test_005",
+    "description": "Fictional person that does not exist. The agent must not invent events and should explain the gap.",
+    "request": {
+      "entity_type": "person",
+      "name": "Zelviantrix Harbor",
+      "details": "",
+      "meeting_datetime": "2026-11-12T15:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss a potential partnership"
+    },
+    "expected_facts": [],
+    "expected_gaps": [
+      "No sources were found for this person; this does not prove that they do not exist or that nothing happened."
+    ],
+    "expect_no_events": true
+  },
+  {
+    "id": "test_006",
+    "description": "Well-known company, partnership meeting. Recent sustainability initiatives should surface.",
+    "request": {
+      "entity_type": "company",
+      "name": "IKEA",
+      "details": "",
+      "meeting_datetime": "2026-11-10T14:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss a potential partnership"
+    },
+    "expected_facts": [
+      {
+        "fact": "IKEA has recently focused on sustainability initiatives, material reuse and the development of its international business operations.",
+        "kind": "recent",
+        "importance": 1.0,
+        "source": [
+          {
+            "title": "IKEA announces new sustainability initiatives",
+            "url": "https://example.com/article1"
+          },
+          {
+            "title": "IKEA introduces recycled material initiatives",
+            "url": "https://example.com/article2"
+          }
+        ]
+      }
+    ],
+    "expected_gaps": [
+      "No details were given, so it is unclear which IKEA entity is meant (for example Inter IKEA Group or Ingka Group)."
+    ],
+    "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
   }
 ]

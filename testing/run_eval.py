@@ -15,6 +15,7 @@ Usage (from the repository root):
 Judge configuration (environment variables, never hard-coded):
     JUDGE_BASE_URL  e.g. http://localhost:8080/v1
     JUDGE_API_KEY   optional, sent as a Bearer token
+    JUDGE_AUTH_HEADER  optional full Authorization value (e.g. BIFROST_BASIC_AUTH)
     JUDGE_MODEL     model name as the gateway expects it
 """
 
@@ -110,6 +111,12 @@ def load_dataset(path):
                 problems.append(f"{label}: importance must be in (0, 1]")
             if fact.get("kind") not in ("recent", "background"):
                 problems.append(f"{label}: fact kind must be recent/background")
+        if "gaps" in case:
+            problems.append(f"{label}: use 'expected_gaps', not 'gaps'")
+        gaps = case.get("expected_gaps", [])
+        if not isinstance(gaps, list) or not all(
+                isinstance(g, str) and g.strip() for g in gaps):
+            problems.append(f"{label}: expected_gaps must be non-empty strings")
     if problems:
         raise SystemExit("Dataset errors:\n  " + "\n  ".join(problems))
     return cases
@@ -201,14 +208,32 @@ def deterministic_checks(case, result):
         if term.lower() in text:
             failures.append(f"contains forbidden term (wrong entity?): {term!r}")
 
-    if case.get("expect_no_events"):
-        if result["events"]:
-            failures.append(
-                f"expected no events, got {len(result['events'])}")
-        if not result["gaps"]:
-            failures.append("expected gaps explaining missing information")
+    if case.get("expect_no_events") and result["events"]:
+        failures.append(f"expected no events, got {len(result['events'])}")
 
+    failures += gap_checks(result, warnings)
     return failures, warnings
+
+
+def normalize(text):
+    return " ".join(text.lower().split()).rstrip(".!? ")
+
+
+def gap_checks(result, warnings):
+    """gaps: no blanks, no repeats, and an explanation when nothing was found."""
+    failures = []
+    gaps = result["gaps"]
+    if any(not g.strip() for g in gaps):
+        failures.append("empty string in gaps")
+    seen = set()
+    for g in gaps:
+        key = normalize(g)
+        if key and key in seen:
+            warnings.append(f"duplicate gap: {g.strip()!r}")
+        seen.add(key)
+    if not result["events"] and not any(g.strip() for g in gaps):
+        failures.append("no events and no gaps explaining why")
+    return failures
 
 
 # ---------------------------------------------------------------------------
@@ -220,6 +245,9 @@ class Judge:
         self.base = os.environ.get("JUDGE_BASE_URL", "").rstrip("/")
         self.model = os.environ.get("JUDGE_MODEL", "")
         self.key = os.environ.get("JUDGE_API_KEY", "")
+        # Full Authorization header value, e.g. the same one as
+        # BIFROST_BASIC_AUTH ("Basic ..."). Takes precedence over the key.
+        self.auth = os.environ.get("JUDGE_AUTH_HEADER", "")
         if not self.base or not self.model:
             raise SystemExit("--judge needs JUDGE_BASE_URL and JUDGE_MODEL")
 
@@ -235,7 +263,9 @@ class Judge:
             ],
         }).encode()
         headers = {"Content-Type": "application/json"}
-        if self.key:
+        if self.auth:
+            headers["Authorization"] = self.auth
+        elif self.key:
             headers["Authorization"] = f"Bearer {self.key}"
         req = urllib.request.Request(
             f"{self.base}/chat/completions", data=body, headers=headers)
@@ -271,6 +301,30 @@ class Judge:
             "\"unsupported_claims\": [\"...\"]}."
         )
 
+    def gap_coverage(self, gaps, expected_gap):
+        return self.ask(
+            "Limitations listed in a briefing:\n- " + "\n- ".join(gaps or ["(none)"])
+            + f"\n\nExpected limitation: {expected_gap}\n\n"
+            "Is this limitation mentioned (same meaning, wording may differ)? "
+            "Reply {\"verdict\": \"covered\" | \"not_covered\", "
+            "\"reason\": \"...\"}."
+        )
+
+    def gap_quality(self, goal, gaps):
+        return self.ask(
+            f"Meeting goal: {goal or '(not specified)'}\n\n"
+            "Each item below should describe a limitation of the research "
+            "(what is missing or uncertain, and ideally why), not state a "
+            "fact about the company or person.\n\nItems:\n"
+            + "\n".join(f"{i}. {g}" for i, g in enumerate(gaps, 1))
+            + "\n\nFor every item reply with: \"specific\" (true if it names "
+            "what exactly is missing; false for generic text like 'some "
+            "information may be missing') and \"is_limitation\" (false if it "
+            "is actually a factual claim or a guess). Reply {\"items\": "
+            "[{\"n\": 1, \"specific\": true, \"is_limitation\": true, "
+            "\"reason\": \"...\"}]}."
+        )
+
     def goal_relevance(self, goal, result):
         items = result["questions"] + [
             e.get("discussion_point") or "" for e in result["events"]
@@ -301,6 +355,13 @@ def judge_case(judge, case, result):
     scores["summary"] = judge.summary_support(
         result["summary"], list(evidence.values()))
     scores["goal"] = judge.goal_relevance(case["request"]["goal"], result)
+    scores["expected_gaps"] = [
+        {"gap": g, **judge.gap_coverage(result["gaps"], g)}
+        for g in case.get("expected_gaps", [])
+    ]
+    if result["gaps"]:
+        scores["gap_quality"] = judge.gap_quality(
+            case["request"]["goal"], result["gaps"]).get("items", [])
     return scores
 
 
@@ -322,6 +383,15 @@ def summarize_scores(scores):
         out["summary_supported"] = bool(scores["summary"].get("supported"))
     if scores["goal"]:
         out["goal_score"] = scores["goal"].get("score")
+    expected = scores.get("expected_gaps", [])
+    if expected:
+        got = sum(g.get("verdict") == "covered" for g in expected)
+        out["gap_recall"] = round(got / len(expected), 2)
+    quality = scores.get("gap_quality", [])
+    if quality:
+        out["vague_gaps"] = sum(not q.get("specific", True) for q in quality)
+        out["non_limitation_gaps"] = sum(
+            not q.get("is_limitation", True) for q in quality)
     return out
 
 
@@ -332,6 +402,49 @@ def summarize_scores(scores):
 def load_backend(spec):
     module, _, func = spec.partition(":")
     return getattr(importlib.import_module(module), func or "generate_briefing")
+
+
+def check_file(args):
+    """Check one saved model output (raw result or a saved run file)."""
+    data = json.loads(args.check_file.read_text(encoding="utf-8"))
+    result = data["result"] if "result" in data and "summary" not in data \
+        else data
+
+    if args.case:
+        matches = [c for c in load_dataset(args.dataset)
+                   if c["id"] == args.case]
+        if not matches:
+            raise SystemExit(f"No case {args.case!r} in {args.dataset}")
+        case = matches[0]
+    elif args.meeting:
+        try:
+            if datetime.fromisoformat(args.meeting).tzinfo is None:
+                raise ValueError
+        except ValueError:
+            raise SystemExit("--meeting needs ISO 8601 with a UTC offset, "
+                             "e.g. 2026-11-06T14:00:00+01:00")
+        case = {"id": args.check_file.name, "expected_facts": [],
+                "request": {"meeting_datetime": args.meeting,
+                            "goal": args.goal}}
+    else:
+        raise SystemExit("--check-file needs --case ID or --meeting DATETIME")
+
+    failures, warnings = deterministic_checks(case, result)
+    print(f"[{'FAIL' if failures else 'PASS'}] {args.check_file.name} "
+          f"(window {' .. '.join(map(str, research_window(case['request'])))})")
+    for msg in failures:
+        print(f"    x {msg}")
+    for msg in warnings:
+        print(f"    ! {msg}")
+
+    if args.judge:
+        if any(f.startswith("validate_result") for f in failures):
+            print("\nJudge skipped: the output does not match the contract.")
+        else:
+            details = judge_case(Judge(), case, result)
+            print("\nScores:", summarize_scores(details))
+            print(json.dumps(details, ensure_ascii=False, indent=2))
+    sys.exit(1 if failures else 0)
 
 
 def main():
@@ -348,11 +461,23 @@ def main():
     parser.add_argument("--repo", type=Path,
                         help="repository to import the backend from "
                              "(default: this checkout)")
+    parser.add_argument("--check-file", type=Path,
+                        help="check a saved model output instead of calling "
+                             "the backend; use with --case or --meeting")
+    parser.add_argument("--case", help="dataset case id for --check-file")
+    parser.add_argument("--meeting",
+                        help="meeting datetime with UTC offset for "
+                             "--check-file without --case")
+    parser.add_argument("--goal", default="",
+                        help="meeting goal for --check-file without --case")
     args = parser.parse_args()
     if args.repo:
         if not args.repo.is_dir():
             raise SystemExit(f"Not a directory: {args.repo}")
         use_repo(args.repo)
+
+    if args.check_file:
+        check_file(args)
 
     cases = load_dataset(args.dataset)
     if args.only:
