@@ -56,7 +56,7 @@
         "source": [
           {
             "title": "How much is OpenAI worth today?",
-            "url": "https://www.theguardian.com/technology/2026/nov/02/openai-seeks-to-raise-10bn-in-new-funding-round"
+            "url": "https://newmarketpitch.com/blogs/news/frontier-ai-labs-openai-worth"
           }
         ]
       },
@@ -199,19 +199,47 @@
     },
     "expected_facts": [
       {
-        "fact": "IKEA has recently focused on sustainability initiatives, material reuse and the development of its international business operations.",
+        "fact": "Inter IKEA Group reported revenues of EUR 25.9 billion (EUR 26.3 billion in FY25), an operating result of EUR 1.5 billion (EUR 1.7 billion in FY25) and a net result of EUR 1.4 billion (EUR 1.5 billion in FY25).",
         "kind": "recent",
         "importance": 1.0,
+        "date": "2026-11-06",
         "source": [
           {
-            "title": "IKEA announces new sustainability initiatives",
-            "url": "https://example.com/article1"
+            "title": "Inter IKEA Group Reports FY26: Building a stronger IKEA for the future",
+            "url": "https://www.inter.ikea.com/en/newsroom/inter-ikea-group-reports-fy26-building-a-stronger-ikea-for-the-future"
+          }
+        ],
+        "discussion_point": "The revenue is falling, what's the plan to reverse this trend and how might it affect partnership opportunities?"
+      },
+      {
+        "fact": "IKEA has recently focused on sustainability initiatives, material reuse and the development of its international business operations.",
+        "kind": "recent",
+        "date": "2026-11-06",
+        "importance": 0.9,
+        "source": [
+          {
+            "title": "Inter IKEA Group Reports FY26: Building a stronger IKEA for the future",
+            "url": "https://www.inter.ikea.com/en/newsroom/inter-ikea-group-reports-fy26-building-a-stronger-ikea-for-the-future"
+          }
+        ],
+        "discussion_point": "This development may create opportunities for partnerships involving sustainable materials."
+      },
+      {
+        "fact": "Ikea reported a third straight year of declining sales.",
+        "kind": "recent",
+        "date": "2026-11-06",
+        "importance": 0.9,
+        "source": [
+          {
+            "title": "Ikea CEO vows to bring growth back after sales fall for third year",
+            "url": "https://www.fashionnetwork.com/news/Ikea-ceo-vows-to-bring-growth-back-after-sales-fall-for-third-year,1882772.html"
           },
           {
-            "title": "IKEA introduces recycled material initiatives",
-            "url": "https://example.com/article2"
+            "title": "IKEA's global sales fell for a third straight year as shoppers cut spending",
+            "url": "https://qz.com/ikea-sales-fall-third-year-shoppers-cut-spending-110626"
           }
-        ]
+        ],
+        "discussion_point":"What are the implications of declining sales for potential partnerships with IKEA?"
       }
     ],
     "expected_gaps": [
