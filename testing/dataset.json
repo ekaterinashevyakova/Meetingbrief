@@ -1,0 +1,111 @@
+[
+  {
+    "id": "test_001",
+    "description": "Well-known person, investment meeting. Recent financial news should surface.",
+    "request": {
+      "entity_type": "person",
+      "name": "Sam Altman",
+      "details": "CEO of OpenAI",
+      "meeting_datetime": "2026-11-09T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Potential investment"
+    },
+    "expected_facts": [
+      {
+        "fact": "Sam Altman is the CEO of OpenAI.",
+        "kind": "background",
+        "importance": 1.0,
+        "source": "https://openai.com/index/openai-announces-new-members-to-board-of-directors/"
+      },
+      {
+        "fact": "OpenAI's forecast for this year is $50bn, $50bn less than promised a month earlier.",
+        "kind": "background",
+        "date": "2026-10-09",
+        "importance": 0.8,
+        "source": "https://www.theguardian.com/technology/2026/oct/09/openai-forecast-revenue-gap"
+      },
+      {
+        "fact": "Anthropic, OpenAI's main competitor, has reached a higher valuation than OpenAI.",
+        "kind": "background",
+        "date": "2026-05-28",
+        "importance": 0.9,
+        "source": "https://www.theguardian.com/technology/2026/may/28/anthropic-ai-valuation"
+      },
+      {
+        "fact": "OpenAI is not profitable.",
+        "kind": "background",
+        "importance": 0.85,
+        "source": "https://newmarketpitch.com/blogs/news/frontier-ai-labs-openai-profitability"
+      }
+    ],
+    "must_not_contain": ["Disney", "E! Networks"]
+  },
+  {
+    "id": "test_002",
+    "description": "Namesake of a famous person. The agent must not mix in OpenAI facts.",
+    "request": {
+      "entity_type": "person",
+      "name": "Sam Altman",
+      "details": "Director, Marketing Strategy and Planning at Disney ABC Television Group",
+      "meeting_datetime": "2026-11-11T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Hire"
+    },
+    "expected_facts": [
+      {
+        "fact": "Director, Marketing Strategy and Planning at Disney ABC Television Group.",
+        "kind": "background",
+        "importance": 1.0,
+        "source": "https://www.linkedin.com/in/samaltman/"
+      },
+      {
+        "fact": "Previously worked at E! Networks, then ABC.",
+        "kind": "background",
+        "importance": 0.8,
+        "source": "https://www.linkedin.com/in/samaltman/"
+      }
+    ],
+    "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
+  },
+  {
+    "id": "test_003",
+    "description": "Same namesake, different goal. Questions and discussion points should differ from test_002.",
+    "request": {
+      "entity_type": "person",
+      "name": "Sam Altman",
+      "details": "Director, Marketing Strategy and Planning at Disney ABC Television Group",
+      "meeting_datetime": "2026-11-11T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Suggesting a new project"
+    },
+    "expected_facts": [
+      {
+        "fact": "Director, Marketing Strategy and Planning at Disney ABC Television Group.",
+        "kind": "background",
+        "importance": 1.0,
+        "source": "https://www.linkedin.com/in/samaltman/"
+      },
+      {
+        "fact": "Previously worked at E! Networks, then ABC.",
+        "kind": "background",
+        "importance": 0.8,
+        "source": "https://www.linkedin.com/in/samaltman/"
+      }
+    ],
+    "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
+  },
+  {
+    "id": "test_004",
+    "description": "Fictional company that does not exist. The agent must not invent events and should explain the gap.",
+    "request": {
+      "entity_type": "company",
+      "name": "Zelvantrix Harbor Analytics",
+      "details": "",
+      "meeting_datetime": "2026-11-12T15:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss a potential partnership"
+    },
+    "expected_facts": [],
+    "expect_no_events": true
+  }
+]

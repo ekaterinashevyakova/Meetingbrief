@@ -1,0 +1,51 @@
+{
+    "is_demo": false,
+
+    "summary": "IKEA has recently focused on sustainability initiatives, material reuse and the development of its international business operations.",
+
+    "events": [
+        {
+            "title": "Expansion of sustainability initiatives",
+            "date": "2026-11-03",
+            "description": "IKEA announced an expansion of its sustainability initiatives.",
+
+            "source_ids": ["S1", "S2"],
+
+            "discussion_point": "This development may create opportunities for partnerships involving sustainable materials."
+        }
+    ],
+
+    "questions": [
+        "What are IKEA's current priorities regarding sustainable supply chains?",
+        "How does the company evaluate potential partners?"
+    ],
+
+    "conversation_starters": [
+        "I noticed IKEA has been expanding its sustainability initiatives. How are these priorities influencing your current partnership strategy?"
+    ],
+
+    "gaps": [
+        "The available sources provide limited information about specific partnership opportunities."
+    ],
+
+    "sources": [
+        {
+            "id": "S1",
+            "title": "IKEA announces new sustainability initiatives",
+            "url": "https://example.com/article1",
+            "excerpt": "IKEA has announced...",
+            "published_date": "2026-11-03T10:00:00+01:00",
+            "published_date_note": "Tavily date estimate; may represent original publication or a later update.",
+            "article_text": "Full article text..."
+        },
+        {
+            "id": "S2",
+            "title": "IKEA introduces recycled material initiatives",
+            "url": "https://example.com/article2",
+            "excerpt": "The company introduced...",
+            "published_date": "2026-10-29T12:00:00+01:00",
+            "published_date_note": "Tavily date estimate; may represent original publication or a later update.",
+            "article_text": "Full article text..."
+        }
+    ]
+}
