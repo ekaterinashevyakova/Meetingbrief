@@ -5,6 +5,9 @@ from urllib.parse import urlsplit, urlunsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from tavily import TavilyClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def _parse_published_date(value, local_timezone):

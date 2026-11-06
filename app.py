@@ -3,8 +3,16 @@ from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 import streamlit as st
+import logging
 
-from demo_data import generate_briefing
+from briefing_generator import generate_briefing
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
+
+logger = logging.getLogger(__name__)
 
 
 st.set_page_config(page_title="MeetingBrief", page_icon="📋")
@@ -147,7 +155,6 @@ def render_briefing(request, result):
 
 st.title("MeetingBrief")
 st.write("Prepare for your meeting with a concise, source-backed briefing.")
-st.info("Demo mode. Web research and AI are not connected yet.")
 
 if "briefing" not in st.session_state:
     st.session_state.briefing = None
@@ -260,11 +267,16 @@ if submitted:
                 "result": result,
             }
 
-        except Exception:
+        except Exception as error:
+            logger.exception("Failed to generate briefing")
+
             st.error(
                 "We couldn't prepare this briefing. Please try again. "
                 "If a previous briefing appears below, it has not been updated."
             )
+
+            with st.expander("Technical error details"):
+                st.exception(error)
 
 if st.session_state.briefing is not None:
     saved = st.session_state.briefing
