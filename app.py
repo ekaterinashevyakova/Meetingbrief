@@ -124,6 +124,29 @@ def research_context(request, result):
 
     return lines
 
+def source_date_details(source):
+    """Keep the source publication/update date separate from event dates."""
+    value = source.get("published_date")
+    if isinstance(value, str) and value.strip():
+        reported_date = value.strip()
+    else:
+        reported_date = "Not provided"
+
+    note = source.get("published_date_note")
+    if not isinstance(note, str) or not note.strip():
+        note = (
+            "This source date is not the event date. "
+            "It may refer to publication or a later page update."
+            if reported_date != "Not provided"
+            else "The source publication/update date is unavailable."
+        )
+
+    return [
+        f"Reported publication/update date: {reported_date}",
+        f"Date note: {note.strip()}",
+    ]
+
+
 def export_briefing(request, result):
     meeting = datetime.fromisoformat(request["meeting_datetime"])
 
@@ -189,6 +212,7 @@ def export_briefing(request, result):
             "",
             f"### {source['id']} — {source['title']}",
             safe_url(source.get("url")) or "No source link available.",
+            *source_date_details(source),
             "Supporting excerpt:",
             source.get("excerpt") or "No excerpt provided.",
         ])
@@ -281,6 +305,9 @@ def render_briefing(request, result):
                 st.link_button(f"Open {source['id']}", url)
             else:
                 st.caption("No source link available.")
+            for line in source_date_details(source):
+                st.caption(line)
+            st.write("Supporting excerpt:")
             st.write(source.get("excerpt") or "No excerpt provided.")
             st.divider()
 
