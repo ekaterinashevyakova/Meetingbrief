@@ -1,95 +1,201 @@
 # MeetingBrief
 
-An AI-powered meeting preparation assistant being developed for
-Global AI Hackathon 2026 by a team of four.
+A meeting-preparation assistant built by a team of four for Global AI Hackathon 2026.
 
-## Live demo
+Enter a company or person, a meeting time and an optional objective to prepare a concise briefing with recent developments, source references, discussion questions and information gaps.
 
-https://meetingbrief.streamlit.app/ 
+## Hosted demo and development branch
 
-The demo uses fictional data. Live research and AI generation
-are not connected yet.
+[Open the hosted demo](https://meetingbrief.streamlit.app/)
 
-## Project goal
+The hosted application is deployed from `main` and currently uses fictional demonstration data. It does not automatically include changes made in other branches.
 
-Given a company or person and a scheduled meeting time, generate
-a concise briefing covering relevant developments from the preceding
-30 days, with citations, discussion questions, and information gaps.
+This branch, `katya/frontend-integration`, combines the updated frontend with the Tavily and Bifrost workflow. Demo mode and mode switching have been manually checked. End-to-end Live operation in this combined branch is pending verification with a configured Bifrost instance.
 
-## Current status
+## Demo and Live modes
 
-The Streamlit frontend is implemented with fictional demonstration data.
+| Mode | Behavior | Requirements |
+| --- | --- | --- |
+| Demo | Displays explicitly fictional examples; makes no research or model API calls | Python dependencies |
+| Live | Calls Tavily, then requests a briefing from a model through Bifrost | Tavily key, reachable Bifrost gateway and a configured model provider |
 
-Implemented features:
-- Company and person input modes with contextual field labels
-- Meeting date, time, time zone and objective
+Switching modes clears the previous briefing and resets the meeting form.
+
+Bifrost is the model gateway. It does not supply model-provider credits or guarantee factual accuracy.
+
+## Frontend features
+
+- Company and person input modes with contextual labels and disambiguation guidance
+- Meeting date, time, time zone and optional objective
 - Required-name validation
-- Structured briefing display with events and source excerpts
-- Preservation and clearing of the last generated briefing
-- Empty-result and generation-error handling
+- Structured events, questions, conversation starters and information gaps
+- Expandable sources with supporting excerpts and reported publication/update dates
+- Requested 30-day research window and collection-time display when supplied
+- Markdown download, including demo warnings and source-date notes
+- Full form and briefing reset
+- Handling of empty results and generation failures
 
-Live Tavily research and model access through Bifrost are not connected yet.
+The Markdown download is not a guaranteed single-page PDF.
 
-See INTEGRATION.md for the request and response format.
-See TESTING.md for manual checks and remaining validation.
+## How the workflow fits together
 
-## Planned technology stack
+```text
+Meeting form
+    |
+    +-- Demo --> demo_data.generate_briefing
+    |
+    +-- Live --> briefing_generator.generate_briefing
+                     |
+                     +-- tavily_search.search_sources
+                     +-- model request through Bifrost
+                     +-- JSON parsing and structural validation
+    |
+Briefing display and Markdown export
+```
 
-- Python
-- Streamlit — user interface
-- Tavily — web research
-- Bifrost — gateway for language model requests
+The Python application calls Tavily. Bifrost handles the subsequent model request.
 
-## Run locally
+## Run this branch locally
 
-Python 3.14 was used for the initial interface.
+The initial frontend was developed with Python 3.14. Full Live compatibility must be checked in the team's test environment.
 
-### 1. Clone the repository
+### 1. Get the development branch
 
-    git clone https://github.com/ekaterinashevyakova/Meetingbrief.git
-    cd Meetingbrief
+For a new checkout:
 
-### 2. Create a virtual environment
+```bash
+git clone --branch katya/frontend-integration https://github.com/ekaterinashevyakova/Meetingbrief.git
+cd Meetingbrief
+```
 
-    python3 -m venv .venv
+If the repository is already on your computer, save your current work before switching branches:
 
-### 3. Activate it
+```bash
+git fetch origin
+git switch katya/frontend-integration
+git pull --ff-only origin katya/frontend-integration
+```
+
+### 2. Create and activate an environment
 
 macOS / Linux:
 
-    source .venv/bin/activate
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
 Windows PowerShell:
 
-    .venv\Scripts\Activate.ps1
+```powershell
+py -m venv .venv
+.venv\Scripts\Activate.ps1
+```
 
-### 4. Install dependencies
+### 3. Install dependencies
 
-    python -m pip install -r requirements.txt
+```bash
+python -m pip install -r requirements.txt
+```
 
-### 5. Start the application
+### 4. Start the interface
 
-    python -m streamlit run app.py
+```bash
+python -m streamlit run app.py
+```
 
-Open http://localhost:8501 if the browser does not open automatically.
-Keep the terminal running while using the application.
-Press Ctrl+C in the terminal to stop it.
+Open the Local URL printed in the terminal, normally http://localhost:8501.
+
+Select **Demo** for a no-key interface check. Enter meeting details and click **Generate briefing**. Keep the terminal running while using the app. To stop the server, press **Control+C** in that terminal.
+
+## Additional setup for Live mode
+
+### 1. Run Bifrost and configure a model provider
+
+Follow the [Bifrost gateway setup](https://docs.getbifrost.ai/quickstart/gateway/setting-up) and [provider configuration](https://docs.getbifrost.ai/quickstart/gateway/provider-configuration) instructions.
+
+Configure your own model-provider API key inside Bifrost. Set up gateway authentication compatible with the application's current Basic Authorization header.
+
+The current model client sends provider-dependent generation options. Verify that the selected model supports these options; changing the model name alone may not be sufficient.
+
+### 2. Configure local application secrets
+
+Create a local `.env` file beside `app.py`:
+
+```dotenv
+TAVILY_API_KEY=REPLACE_WITH_YOUR_TAVILY_KEY
+BIFROST_BASE_URL=http://localhost:8080/v1
+BIFROST_BASIC_AUTH="Basic REPLACE_WITH_BASE64_OF_YOUR_GATEWAY_USERNAME_COLON_PASSWORD"
+BIFROST_MODEL=REPLACE_WITH_YOUR_CONFIGURED_BIFROST_MODEL_ID
+```
+
+These are placeholders, not working credentials.
+
+- `TAVILY_API_KEY` authenticates web research.
+- `BIFROST_BASE_URL` points to the gateway API, including `/v1`.
+- `BIFROST_BASIC_AUTH` authenticates to the gateway, not the model provider.
+- `BIFROST_MODEL` identifies a model configured in Bifrost.
+- The provider key belongs in Bifrost's configuration, not in the frontend.
+
+The current client loads the project-root `.env` during the first Live import and allows it to override environment values. Restart Streamlit after changing configuration.
+
+### 3. Check the full workflow
+
+Ensure Bifrost is running, start Streamlit, select **Live** and submit a meeting. Check the returned sources and claims before treating the briefing as reliable.
+
+A locally running Bifrost instance is not automatically reachable from Streamlit Community Cloud. On the hosted service, `localhost` refers to the cloud machine, not a teammate's laptop. A fully hosted Live version needs a reachable, authenticated gateway and separately configured secrets.
+
+## Dates and evidence
+
+- The requested window starts 30 days before the meeting.
+- Available research must end no later than the meeting or the collection time.
+- A source's `published_date` can be an estimate of publication or update time.
+- An event's `date` describes the event itself and may be null.
+- The publication date must not automatically become the event date.
+- Source IDs and valid date formatting do not prove that a claim is supported.
+- Historical briefings require careful exclusion of information unavailable at meeting time.
+
+The frontend displays `researched_at` when present. The current copied generator does not yet forward the research timestamp to that field, so Live collection time may display **Not provided** until this mapping is added.
+
+## Validation status and remaining work
+
+Completed manual frontend checks include fictional result display, empty results, simulated generation errors, mode switching, Markdown export and source-date fallback display. See [TESTING.md](TESTING.md) for the recorded checks; it is being updated as integration progresses.
+
+Still required:
+
+- Verify this combined branch with real Tavily and Bifrost calls.
+- Forward research collection metadata in every result path.
+- Verify claim support, entity identity, event dates and research-window compliance.
+- Test real source timestamps, missing dates and conflicting information.
+- Investigate the reported loading indicator after Streamlit's built-in Stop action; reliable cancellation is not implemented or verified.
+- Recheck reset, export and narrow-window layout after integration.
+- Reproduce the setup on another team member's computer.
+- Prepare the final demo video and submission materials.
+
+Do not treat the current structural validation as a factual verification system.
+
+## Main files
+
+| File | Responsibility |
+| --- | --- |
+| `app.py` | Form, Demo/Live selection, result display and export |
+| `demo_data.py` | Fictional examples |
+| `tavily_search.py` | Search, source processing and temporal filtering |
+| `briefing_generator.py` | Research orchestration, model instructions and response parsing |
+| `bifrost_client.py` | Model requests through Bifrost |
+| `requirements.txt` | Python dependencies |
+| [INTEGRATION.md](INTEGRATION.md) | Request/response contract and integration notes |
+| [TESTING.md](TESTING.md) | Manual checks and pending validation |
 
 ## Team responsibilities
 
-1. User interface and user experience
-2. Tavily integration and source processing
-3. Bifrost integration and briefing generation
-4. Application integration, testing, and setup documentation
-
-## Next milestones
-
-- Connect the interface to the research and generation workflow.
-- Validate citations, dates, and entity relevance.
-- Handle missing information and API failures.
-- Prepare evaluation examples and the project demonstration.
+- **Katya:** frontend and user experience
+- **Irina:** Tavily research and source processing
+- **Marina:** Bifrost/model integration and briefing generation
+- **Dilyara:** end-to-end testing, quality evaluation and reproducibility checks
 
 ## Credentials
 
-The current interface demo does not require API keys.
-Do not commit API keys, passwords, or local secrets to this repository.
+Do not commit `.env`, provider keys, gateway credentials or Streamlit secrets. The repository ignores `.env` and `.streamlit/secrets.toml`.
+
+Base64 encodes gateway credentials; it does not encrypt them. Replace credentials exposed in chats, recordings or repository history.
