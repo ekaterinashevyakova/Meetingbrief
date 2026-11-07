@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from demo_data import generate_briefing
+from demo_data import generate_briefing as generate_demo_briefing
 
 
 st.set_page_config(
@@ -310,13 +310,28 @@ st.caption(
     "Recent developments, useful questions and traceable sources "
     "in one concise briefing."
 )
-st.info("Demo mode · Live web research and AI are not connected yet.")
 
 if "briefing" not in st.session_state:
     st.session_state.briefing = None
 
 if "form_version" not in st.session_state:
     st.session_state.form_version = 0
+
+mode = st.radio(
+    "Briefing mode",
+    ["Demo", "Live"],
+    horizontal=True,
+    key="briefing_mode",
+    on_change=reset_meeting,
+)
+
+if mode == "Demo":
+    st.info("Demo mode · Fictional examples. No API requests are made.")
+else:
+    st.info(
+        "Live mode · Uses Tavily and your configured Bifrost gateway. "
+        "API usage may incur costs."
+    )
 
 form_column, result_column = st.columns([2, 3], gap="large")
 
@@ -403,7 +418,15 @@ with form_column:
 
             try:
                 with st.spinner("Preparing your briefing..."):
-                    result = generate_briefing(request)
+                    if mode == "Demo":
+                        result = generate_demo_briefing(request)
+                    else:
+                        from briefing_generator import (
+                            generate_briefing as generate_live_briefing,
+                        )
+
+                        result = generate_live_briefing(request)
+
                     validate_result(result)
 
                 st.session_state.briefing = {
@@ -429,9 +452,15 @@ with result_column:
             st.write("Recent developments with source references")
             st.write("Questions and conversation starters")
             st.write("Information gaps and supporting excerpts")
-        st.caption(
-            "The current demo uses fictional examples. "
-            "No research is performed."
-        )
+        if mode == "Demo":
+            st.caption(
+                "The current demo uses fictional examples. "
+                "No research is performed."
+            )
+        else:
+            st.caption(
+                "Live mode requires your local research and model "
+                "configuration. Research starts only when you submit."
+            )
     else:
         render_briefing(saved["request"], saved["result"])
