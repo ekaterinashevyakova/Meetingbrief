@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
@@ -411,7 +411,10 @@ with form_column:
                 "after the meeting."
             ),
         )
-        meeting_time = st.time_input("Meeting time")
+        meeting_time = st.time_input(
+            "Meeting time",
+            value=time(12, 0),
+        )
         timezone = st.selectbox(
             "Time zone",
             ["Europe/Rome", "Europe/Moscow", "UTC"],
