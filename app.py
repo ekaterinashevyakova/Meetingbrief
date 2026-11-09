@@ -378,6 +378,7 @@ with form_column:
     with st.form(form_key):
         name = st.text_input(
             "Company name" if is_company else "Full name",
+            max_chars=150,
             placeholder="e.g. Inter IKEA Systems B.V."
             if is_company
             else "e.g. Jane Smith",
@@ -397,6 +398,7 @@ with form_column:
             "Company website (optional)"
             if is_company
             else "Company or role (optional)",
+            max_chars=300,
             placeholder="https://www.ikea.com"
             if is_company
             else "Marketing Director at Example Company",
@@ -421,6 +423,7 @@ with form_column:
         )
         goal = st.text_area(
             "Meeting objective (optional)",
+            max_chars=500,
             placeholder="Discuss a potential partnership",
         )
         submitted = st.form_submit_button(
@@ -431,6 +434,12 @@ with form_column:
     if submitted:
         if not name.strip():
             st.warning("Please enter a company name or person's name.")
+        elif len(name) > 150:
+            st.warning("Company name or person's name must be 150 characters or fewer.")
+        elif len(details) > 300:
+            st.warning("Website, company or role must be 300 characters or fewer.")
+        elif len(goal) > 500:
+            st.warning("Meeting objective must be 500 characters or fewer.")
         else:
             meeting = datetime.combine(
                 meeting_date,
