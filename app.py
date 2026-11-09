@@ -308,7 +308,7 @@ def render_briefing(request, result):
             for line in source_date_details(source):
                 st.caption(line)
             st.write("Supporting excerpt:")
-            st.write(source.get("excerpt") or "No excerpt provided.")
+            st.text(source.get("excerpt") or "No excerpt provided.")
             st.divider()
 
     download_column, reset_column = st.columns(2)
