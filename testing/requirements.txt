@@ -1,0 +1,5 @@
+# Evaluation runner and unit tests. The app itself: ../requirements.txt
+anthropic==2.6.0
+openpyxl==3.1.5
+python-dotenv==1.2.4
+pytest==9.2.0

@@ -13,22 +13,19 @@
     "expected_facts": [
       {
         "fact": "Sam Altman is the CEO of OpenAI.",
-        "kind": "background",
-        "importance": 1.0,
+        "importance": "high",
         "source": "https://openai.com/index/openai-announces-new-members-to-board-of-directors/"
       },
       {
         "fact": "OpenAI's forecast for this year is $50bn, $50bn less than promised a month earlier.",
-        "kind": "recent",
         "date": "2026-10-09",
-        "importance": 0.8,
+        "importance": "medium",
         "source": "https://www.theguardian.com/technology/2026/oct/09/openai-forecast-revenue-gap"
       },
       {
         "fact": "An ⁠OpenAI employee who left the ChatGPT maker for Apple sent more than 100 files about an unreleased product to a personal ⁠account and later ⁠made a presentation ​about the unreleased product to senior Apple leadership, a new filing in the lawsuit between OpenAI and Apple alleges.",
-        "kind": "recent",
         "date": "2026-10-14",
-        "importance": 0.9,
+        "importance": "high",
         "source": [
           {
             "title": "OpenAI accuses employee who left for Apple of leaking plans for unreleased device",
@@ -38,9 +35,8 @@
       },
       {
         "fact": "OpenAI is not profitable.",
-        "kind": "recent",
         "date": "2026-11-01",
-        "importance": 0.85,
+        "importance": "high",
         "source": [
           {
             "title": "Can OpenAI ever become profitable?",
@@ -50,9 +46,8 @@
       },
       {
         "fact": "OpenAI is worth around $1.1T today.",
-        "kind": "recent",
         "date": "2026-10-21",
-        "importance": 0.9,
+        "importance": "high",
         "source": [
           {
             "title": "How much is OpenAI worth today?",
@@ -62,9 +57,8 @@
       },
       {
         "fact": "OpenAI has been accused of misleading investors about its financial performance.",
-        "kind": "recent",
         "date": "2026-11-02",
-        "importance": 0.95,
+        "importance": "high",
         "source": [
           {
             "title": "OpenAI accused of misleading investors about financial performance",
@@ -74,9 +68,8 @@
       },
       {
         "fact": "Datacentres are unpopular so OpenAI is rebranding them.",
-        "kind": "recent",
         "date": "2026-11-03",
-        "importance": 0.7,
+        "importance": "medium",
         "source": [
           {
             "title": "Datacentres are deeply unpopular – so the geniuses at OpenAI are rebranding them",
@@ -88,7 +81,10 @@
     "expected_gaps": [
       "The outcome of the legal disputes (the Apple lawsuit and the accusations of misleading investors) is not yet known."
     ],
-    "must_not_contain": ["Disney", "E! Networks"]
+    "must_not_contain": [
+      "Disney",
+      "E! Networks"
+    ]
   },
   {
     "id": "test_002",
@@ -104,14 +100,12 @@
     "expected_facts": [
       {
         "fact": "Director, Marketing Strategy and Planning at Disney ABC Television Group.",
-        "kind": "background",
-        "importance": 1.0,
+        "importance": "high",
         "source": "https://www.linkedin.com/in/samaltman/"
       },
       {
         "fact": "Previously worked at E! Networks, then ABC.",
-        "kind": "background",
-        "importance": 0.8,
+        "importance": "medium",
         "source": "https://www.linkedin.com/in/samaltman/"
       }
     ],
@@ -119,7 +113,12 @@
       "The name is ambiguous: a much better-known Sam Altman (CEO of OpenAI) exists, so sources must be checked to refer to the Disney ABC marketing director.",
       "Little or no recent public news about this person was found in the research window."
     ],
-    "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
+    "must_not_contain": [
+      "OpenAI",
+      "ChatGPT",
+      "Y Combinator",
+      "Worldcoin"
+    ]
   },
   {
     "id": "test_003",
@@ -135,14 +134,12 @@
     "expected_facts": [
       {
         "fact": "Director, Marketing Strategy and Planning at Disney ABC Television Group.",
-        "kind": "background",
-        "importance": 1.0,
+        "importance": "high",
         "source": "https://www.linkedin.com/in/samaltman/"
       },
       {
         "fact": "Previously worked at E! Networks, then ABC.",
-        "kind": "background",
-        "importance": 0.1,
+        "importance": "low",
         "source": "https://www.linkedin.com/in/samaltman/"
       }
     ],
@@ -150,7 +147,12 @@
       "The name is ambiguous: a much better-known Sam Altman (CEO of OpenAI) exists, so sources must be checked to refer to the Disney ABC marketing director.",
       "Little or no recent public news about this person was found in the research window."
     ],
-    "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
+    "must_not_contain": [
+      "OpenAI",
+      "ChatGPT",
+      "Y Combinator",
+      "Worldcoin"
+    ]
   },
   {
     "id": "test_004",
@@ -200,8 +202,7 @@
     "expected_facts": [
       {
         "fact": "Inter IKEA Group reported revenues of EUR 25.9 billion (EUR 26.3 billion in FY25), an operating result of EUR 1.5 billion (EUR 1.7 billion in FY25) and a net result of EUR 1.4 billion (EUR 1.5 billion in FY25).",
-        "kind": "recent",
-        "importance": 1.0,
+        "importance": "high",
         "date": "2026-11-06",
         "source": [
           {
@@ -213,9 +214,8 @@
       },
       {
         "fact": "IKEA has recently focused on sustainability initiatives, material reuse and the development of its international business operations.",
-        "kind": "recent",
         "date": "2026-11-06",
-        "importance": 0.9,
+        "importance": "high",
         "source": [
           {
             "title": "Inter IKEA Group Reports FY26: Building a stronger IKEA for the future",
@@ -226,9 +226,8 @@
       },
       {
         "fact": "Ikea reported a third straight year of declining sales.",
-        "kind": "recent",
         "date": "2026-11-06",
-        "importance": 0.9,
+        "importance": "high",
         "source": [
           {
             "title": "Ikea CEO vows to bring growth back after sales fall for third year",
@@ -239,12 +238,322 @@
             "url": "https://qz.com/ikea-sales-fall-third-year-shoppers-cut-spending-110626"
           }
         ],
-        "discussion_point":"What are the implications of declining sales for potential partnerships with IKEA?"
+        "discussion_point": "What are the implications of declining sales for potential partnerships with IKEA?"
       }
     ],
     "expected_gaps": [
       "No details were given, so it is unclear which IKEA entity is meant (for example Inter IKEA Group or Ingka Group)."
     ],
-    "must_not_contain": ["OpenAI", "ChatGPT", "Y Combinator", "Worldcoin"]
+    "must_not_contain": [
+      "OpenAI",
+      "ChatGPT",
+      "Y Combinator",
+      "Worldcoin"
+    ]
+  },
+  {
+    "id": "gordeliy",
+    "description": "Scientist with little mainstream news. A recent paper and a Nobel Prize in his field; the briefing must not claim he won it.",
+    "request": {
+      "entity_type": "person",
+      "name": "Valentin Gordeliy",
+      "details": "Structural biologist working on microbial rhodopsins",
+      "meeting_datetime": "2026-11-11T11:00:00+03:00",
+      "timezone": "Europe/Moscow",
+      "goal": "Discuss a possible collaboration between our research groups"
+    },
+    "expected_facts": [
+      {
+        "fact": "Gordeliy is a co-author of a recent Nature Communications paper on the molecular mechanism of calcium inhibition in viral channelrhodopsins (OLPVR1).",
+        "date": "2026-09-16",
+        "importance": "high",
+        "source": "https://www.nature.com/articles/s41467-026-77716-5"
+      },
+      {
+        "fact": "The 2026 Nobel Prize in Physiology or Medicine went to Karl Deisseroth, Peter Hegemann and Georg Nagel for light-gated ion channels (channelrhodopsins) and optogenetics. Gordeliy, who also studies these proteins, was not among the laureates.",
+        "date": "2026-10-05",
+        "importance": "medium",
+        "source": "https://www.nobelprize.org/prizes/medicine/2026/press-release/"
+      }
+    ],
+    "expected_gaps": [
+      "Little or no news coverage of Gordeliy himself in the research window; recent information comes mainly from publications."
+    ]
+  },
+  {
+    "id": "fei_fei_li",
+    "description": "Person whose company is being acquired. 'Her lab' is ambiguous (World Labs vs her Stanford lab) and World Labs is private.",
+    "request": {
+      "entity_type": "person",
+      "name": "Fei-Fei Li",
+      "details": "Co-founder and CEO of World Labs; Stanford professor",
+      "meeting_datetime": "2026-11-13T15:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss the financial performance of her lab"
+    },
+    "expected_facts": [
+      {
+        "fact": "AMD announced the acquisition of World Labs in an all-stock transaction valued at approximately $8.2 billion.",
+        "date": "2026-09-28",
+        "importance": "high",
+        "source": "https://www.cnbc.com/2026/09/28/amd-fei-fei-li-world-labs.html"
+      },
+      {
+        "fact": "Fei-Fei Li will join AMD as executive vice president and chief scientist.",
+        "date": "2026-09-28",
+        "importance": "medium",
+        "source": "https://www.tomshardware.com/tech-industry/artificial-intelligence/amd-acquires-ai-legend-fei-fei-lis-world-labs-for-usd8-2-billion-imagenet-pioneer-will-become-amd-chief-scientist-as-the-chipmaker-brings-her-lab-in-house"
+      },
+      {
+        "fact": "The deal is expected to close by the end of 2026; until then World Labs operates independently.",
+        "date": "2026-09-28",
+        "importance": "low",
+        "source": "https://www.storagereview.com/news/amd-to-acquire-world-labs-8-2b-all-stock-fei-fei-li-chief-scientist"
+      }
+    ],
+    "expected_gaps": [
+      "World Labs is a private company, so detailed financial figures (revenue, costs, cash) are not public.",
+      "It is unclear whether 'her lab' means World Labs or her academic lab at Stanford."
+    ]
+  },
+  {
+    "id": "jensen_huang",
+    "description": "Same person and facts, different meeting dates. A meeting before 8 November 2026 must not mention the affair (it had not happened yet); a meeting soon after must; a meeting far in the future has a research window that has not happened yet.",
+    "request": {
+      "entity_type": "person",
+      "name": "Jensen Huang",
+      "details": "Co-founder and CEO of Nvidia",
+      "timezone": "UTC",
+      "goal": "Discuss the legal problems of his company"
+    },
+    "meetings": [
+      {
+        "datetime": "2026-10-20T17:00:00+00:00",
+        "description": "Past meeting before the news: the affair and the share drop are future facts.",
+        "must_not_contain": [
+          "affair",
+          "spy",
+          "unfaithful"
+        ]
+      },
+      {
+        "datetime": "2026-11-09T22:00:00+00:00",
+        "description": "Meeting on the day of the share drop."
+      },
+      {
+        "datetime": "2026-11-12T16:00:00+00:00",
+        "description": "Meeting a few days after the news."
+      },
+      {
+        "datetime": "2026-12-04T16:00:00+00:00",
+        "description": "Meeting four weeks after the news: still inside the 30-day window."
+      },
+      {
+        "datetime": "2027-01-20T16:00:00+00:00",
+        "description": "Meeting far in the future: the news is older than the window, and the window itself is after the research time.",
+        "expect_no_events": true,
+        "expected_gaps": [
+          "The research window lies after the time of research, so developments inside it cannot be known yet."
+        ]
+      }
+    ],
+    "expected_facts": [
+      {
+        "fact": "Jensen Huang admitted to an affair with a woman reported to be a Chinese intelligence asset, and Nvidia's board opened an independent investigation.",
+        "date": "2026-11-08",
+        "importance": "high",
+        "source": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-chinese-spy-investigation.html"
+      },
+      {
+        "fact": "Nvidia shares fell about 4% after the board announced the investigation.",
+        "date": "2026-11-09",
+        "importance": "high",
+        "source": "https://www.nbcnews.com/business/markets/nvidia-stock-falls-probe-ceos-relationship-chinese-spy-rcna608290"
+      },
+      {
+        "fact": "Jensen Huang is the co-founder and CEO of Nvidia.",
+        "importance": "low"
+      }
+    ]
+  },
+  {
+    "id": "gelfand",
+    "description": "Scientist with little recent news. Checks honest gaps and no invented events.",
+    "request": {
+      "entity_type": "person",
+      "name": "Mikhail Gelfand",
+      "details": "Bioinformatician, Skoltech; Institute for Information Transmission Problems (IITP RAS)",
+      "meeting_datetime": "2026-11-17T11:00:00+03:00",
+      "timezone": "Europe/Moscow",
+      "goal": "Discuss working with his research group at Skoltech"
+    },
+    "expected_facts": [
+      {
+        "fact": "Mikhail Gelfand is a bioinformatician known for comparative genomics.",
+        "importance": "medium",
+        "source": "https://en.wikipedia.org/wiki/Mikhail_Gelfand"
+      },
+      {
+        "fact": "Gelfand holds a senior research position at Skoltech (biomedical research) and is also affiliated with the Institute for Information Transmission Problems.",
+        "importance": "medium",
+        "source": "https://msc.skoltech.ru/mikhailgelfand-vp-en"
+      }
+    ],
+    "expected_gaps": [
+      "Little or no recent news about Gelfand or his Skoltech group was found in the research window."
+    ]
+  },
+  {
+    "id": "plata",
+    "description": "Private company with an ambiguous name (plata is Spanish for silver). Buying shares is only possible privately.",
+    "request": {
+      "entity_type": "company",
+      "name": "Plata",
+      "details": "Mexican digital bank (Plata Card)",
+      "meeting_datetime": "2026-11-16T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss buying shares in the bank"
+    },
+    "expected_facts": [
+      {
+        "fact": "Plata raised $405 million in a Series C round at a $5 billion valuation.",
+        "date": "2026-04-16",
+        "importance": "medium",
+        "source": "https://www.themoscowtimes.com/2026/04/16/tinkov-founded-fintech-plata-hits-5bln-valuation-after-405m-funding-round-a92520"
+      },
+      {
+        "fact": "Plata is privately held; shareholders are considering an IPO, but no listing date has been announced.",
+        "importance": "high",
+        "source": "https://www.bloomberg.com/news/articles/2026-04-06/mexico-s-plata-names-ex-banker-kantt-cfo-as-fintech-eyes-ipo"
+      }
+    ],
+    "expected_gaps": [
+      "Plata is not publicly listed, so there is no public share price; a purchase would be a private transaction.",
+      "Little or no news about Plata was found in the research window."
+    ],
+    "must_not_contain": [
+      "silver price"
+    ]
+  },
+  {
+    "id": "michelin",
+    "description": "Listed company, share purchase. Recent quarterly sales should surface.",
+    "request": {
+      "entity_type": "company",
+      "name": "Michelin",
+      "details": "Compagnie Generale des Etablissements Michelin SCA, tire maker listed on Euronext Paris",
+      "meeting_datetime": "2026-11-13T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss buying Michelin SCA shares"
+    },
+    "expected_facts": [
+      {
+        "fact": "Michelin reported nine-month 2026 revenue of about EUR 19.2 billion, up 1.0% at constant exchange rates.",
+        "date": "2026-10-20",
+        "importance": "high",
+        "source": "https://www.michelin.com/en/publications/group/financial-information-at-september-30-2026"
+      },
+      {
+        "fact": "Michelin confirmed its full-year 2026 guidance.",
+        "date": "2026-10-20",
+        "importance": "high",
+        "source": "https://www.globenewswire.com/news-release/2026/10/20/3384720/0/en/michelin-group-revenue-grew-by-1-0-at-iso-fx-and-0-1-at-iso-fx-and-scope-supported-by-michelin-brand-momentum-a-favorable-mix-and-targeted-acquisitions-in-polymer-composite-solutio.html"
+      },
+      {
+        "fact": "Tire volumes fell 0.8% over the nine months, mainly because of lower original-equipment sales.",
+        "date": "2026-10-20",
+        "importance": "medium",
+        "source": "https://www.ad-hoc-news.de/boerse/news/nebenwerte/michelin-stock-q3-growth-accelerates-as-2026-guidance-holds/70432212"
+      }
+    ]
+  },
+  {
+    "id": "pop_mart",
+    "description": "Retailer as a prospective tenant. Store expansion news matters for the goal.",
+    "request": {
+      "entity_type": "company",
+      "name": "Pop Mart",
+      "details": "Chinese collectible toy retailer (Labubu)",
+      "meeting_datetime": "2026-11-18T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss leasing our retail space to a Pop Mart store"
+    },
+    "expected_facts": [
+      {
+        "fact": "Pop Mart opened a three-storey flagship store on Boulevard Haussmann in Paris.",
+        "date": "2026-11-09",
+        "importance": "high",
+        "source": "https://retailboss.co/pop-mart-opens-three-storey-flagship-on-pariss-boulevard-haussmann"
+      },
+      {
+        "fact": "Pop Mart is expanding its physical stores in 2026, including more than 20 Simon malls and outlet centers in the US.",
+        "importance": "medium",
+        "source": "https://chainstoreage.com/pop-mart-plots-2026-growth-heres-where"
+      }
+    ],
+    "expected_gaps": [
+      "The sources do not describe Pop Mart's leasing criteria or preferred store sizes and locations."
+    ]
+  },
+  {
+    "id": "kelloggs",
+    "description": "Ambiguous brand: since the split, Kellogg's brands belong to WK Kellogg Co (Ferrero) and Kellanova (Mars).",
+    "request": {
+      "entity_type": "company",
+      "name": "Kellogg's",
+      "details": "",
+      "meeting_datetime": "2026-11-19T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss a potential collaboration with Kellogg's"
+    },
+    "expected_facts": [
+      {
+        "fact": "Ferrero completed its acquisition of WK Kellogg Co (North American cereals).",
+        "date": "2025-09-26",
+        "importance": "high",
+        "source": "https://www.foodbusinessnews.net/articles/29090-its-a-wrap-ferrero-completes-wk-kellogg-acquisition"
+      },
+      {
+        "fact": "Mars completed its acquisition of Kellanova (Pringles, Pop-Tarts and Kellogg's brands outside North America).",
+        "date": "2025-12-11",
+        "importance": "high",
+        "source": "https://whoistheownerof.com/who-is-the-owner-of-kelloggs-cereal-brands/"
+      }
+    ],
+    "expected_gaps": [
+      "'Kellogg's' is ambiguous: the brands are split between WK Kellogg Co (owned by Ferrero) and Kellanova (owned by Mars), so the counterpart must be confirmed."
+    ]
+  },
+  {
+    "id": "bending_spoons",
+    "description": "Acquisitive tech company, investment meeting. Debt raising and investor news should surface.",
+    "request": {
+      "entity_type": "company",
+      "name": "Bending Spoons",
+      "details": "Italian technology company (Evernote, WeTransfer)",
+      "meeting_datetime": "2026-11-12T10:00:00+01:00",
+      "timezone": "Europe/Rome",
+      "goal": "Discuss investing in Bending Spoons"
+    },
+    "expected_facts": [
+      {
+        "fact": "Bending Spoons sought about $1.5 billion in debt (dollar and euro notes) to fund acquisitions.",
+        "date": "2026-10-27",
+        "importance": "high",
+        "source": "https://www.bloomberg.com/news/articles/2026-10-27/bending-spoons-seeks-1-5-billion-in-debt-to-fund-acquisitions"
+      },
+      {
+        "fact": "Berkshire Hathaway increased its investment in Bending Spoons by more than $300 million.",
+        "date": "2026-10-17",
+        "importance": "medium",
+        "source": "https://www.cnbc.com/2026/10/17/bending-spoons-wants-to-revive-software-castoffs-berkshire-investing.html"
+      },
+      {
+        "fact": "Bending Spoons agreed to acquire Miro at an enterprise value of $1.355 billion.",
+        "date": "2026-09-10",
+        "importance": "medium",
+        "source": "https://investors.bendingspoons.com/newsroom/bending-spoons-agrees-to-acquire-miro"
+      }
+    ]
   }
 ]
