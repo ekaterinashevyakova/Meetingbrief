@@ -184,7 +184,14 @@ Each entry in `dataset.json` is one entity and goal:
   `<id>@<YYYY-MM-DD>`; `--only <id>` runs all of them.
 - `expected_facts`: `fact`, optional `date` (`YYYY-MM-DD`, when it happened
   or was first reported), `importance` (`high`, `medium` (default) or `low`,
-  weighted 1.0 / 0.6 / 0.3 in recall), optional `source`. There is no
+  weighted 1.0 / 0.6 / 0.3 in recall), optional `source` (a URL, or a list
+  of `{"title", "url"}` objects that may also carry `"paywall": true`,
+  `"paid": true` for sponsored content or press releases, and a `"note"`).
+  A dated fact must be at most 30 days before the meeting: `load_dataset()`
+  stops with an error otherwise. Mark older context that a good briefing
+  should still mention with `"background": true`, or set
+  `"allow_old_facts": true` on a meeting where old facts are the point
+  (for example a meeting long after the news). There is no
   `kind` field: it is computed for each meeting from `date`:
   - `recent`: inside that meeting's 30-day window;
   - `background`: before the window, or no date;

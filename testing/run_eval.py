@@ -120,7 +120,7 @@ IMPORTANCE = {"high": 1.0, "medium": 0.6, "low": 0.3}
 DEFAULT_IMPORTANCE = "medium"
 # Per-meeting keys that may override the case's values.
 MEETING_OVERRIDES = ("must_not_contain", "expected_gaps", "expect_no_events",
-                     "description")
+                     "description", "allow_old_facts")
 
 
 def fact_kind(fact_date, request):
@@ -219,6 +219,21 @@ def load_dataset(path):
                 problems.append(f"{label}: expected_gaps must be non-empty "
                                 "strings")
             request = {**req, "meeting_datetime": when}
+            if not overrides.get("allow_old_facts"):
+                start, _ = research_window(request)
+                for f in case.get("expected_facts", []):
+                    try:
+                        day = date.fromisoformat(f.get("date") or "")
+                    except (TypeError, ValueError):
+                        continue
+                    if day < start and not f.get("background"):
+                        problems.append(
+                            f"{label}: fact dated {day} is "
+                            f"{(date.fromisoformat(when[:10]) - day).days} "
+                            f"days before the meeting on {when[:10]} (at most "
+                            f"{WINDOW_DAYS}); mark it \"background\": true if "
+                            f"it is older context on purpose: "
+                            f"{f.get('fact', '')[:60]!r}")
             out = {k: v for k, v in merged.items() if k != "meetings"}
             out["base_id"] = cid
             if len(meetings) > 1:

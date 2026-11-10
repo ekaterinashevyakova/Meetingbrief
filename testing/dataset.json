@@ -267,13 +267,15 @@
         "fact": "Gordeliy is a co-author of a recent Nature Communications paper on the molecular mechanism of calcium inhibition in viral channelrhodopsins (OLPVR1).",
         "date": "2026-09-16",
         "importance": "high",
-        "source": "https://www.nature.com/articles/s41467-026-77716-5"
+        "source": "https://www.nature.com/articles/s41467-026-77716-5",
+        "background": true
       },
       {
         "fact": "The 2026 Nobel Prize in Physiology or Medicine went to Karl Deisseroth, Peter Hegemann and Georg Nagel for light-gated ion channels (channelrhodopsins) and optogenetics. Gordeliy, who also studies these proteins, was not among the laureates.",
         "date": "2026-10-05",
         "importance": "medium",
-        "source": "https://www.nobelprize.org/prizes/medicine/2026/press-release/"
+        "source": "https://www.nobelprize.org/prizes/medicine/2026/press-release/",
+        "background": true
       }
     ],
     "expected_gaps": [
@@ -296,19 +298,22 @@
         "fact": "AMD announced the acquisition of World Labs in an all-stock transaction valued at approximately $8.2 billion.",
         "date": "2026-09-28",
         "importance": "high",
-        "source": "https://www.cnbc.com/2026/09/28/amd-fei-fei-li-world-labs.html"
+        "source": "https://www.cnbc.com/2026/09/28/amd-fei-fei-li-world-labs.html",
+        "background": true
       },
       {
         "fact": "Fei-Fei Li will join AMD as executive vice president and chief scientist.",
         "date": "2026-09-28",
         "importance": "medium",
-        "source": "https://www.tomshardware.com/tech-industry/artificial-intelligence/amd-acquires-ai-legend-fei-fei-lis-world-labs-for-usd8-2-billion-imagenet-pioneer-will-become-amd-chief-scientist-as-the-chipmaker-brings-her-lab-in-house"
+        "source": "https://www.tomshardware.com/tech-industry/artificial-intelligence/amd-acquires-ai-legend-fei-fei-lis-world-labs-for-usd8-2-billion-imagenet-pioneer-will-become-amd-chief-scientist-as-the-chipmaker-brings-her-lab-in-house",
+        "background": true
       },
       {
         "fact": "The deal is expected to close by the end of 2026; until then World Labs operates independently.",
         "date": "2026-09-28",
         "importance": "low",
-        "source": "https://www.storagereview.com/news/amd-to-acquire-world-labs-8-2b-all-stock-fei-fei-li-chief-scientist"
+        "source": "https://www.storagereview.com/news/amd-to-acquire-world-labs-8-2b-all-stock-fei-fei-li-chief-scientist",
+        "background": true
       }
     ],
     "expected_gaps": [
@@ -354,7 +359,8 @@
         "expect_no_events": true,
         "expected_gaps": [
           "The research window lies after the time of research, so developments inside it cannot be known yet."
-        ]
+        ],
+        "allow_old_facts": true
       }
     ],
     "expected_facts": [
@@ -416,10 +422,24 @@
     },
     "expected_facts": [
       {
+        "fact": "Plata said it crossed $1 billion in annual recurring revenue (ARR) in September 2026, less than 3.5 years after launch, with more than 4 million customers in Mexico and a launch in Colombia.",
+        "date": "2026-10-19",
+        "importance": "high",
+        "source": [
+          {
+            "title": "Plata reaches $1 Billion ARR Milestone, becoming the fastest digital bank ever",
+            "url": "https://finance.yahoo.com/technology/articles/plata-reaches-1-billion-arr-183200969.html",
+            "paid": true,
+            "note": "Paid press release from Plata (PR Newswire), not independent reporting."
+          }
+        ]
+      },
+      {
         "fact": "Plata raised $405 million in a Series C round at a $5 billion valuation.",
         "date": "2026-04-16",
         "importance": "medium",
-        "source": "https://www.themoscowtimes.com/2026/04/16/tinkov-founded-fintech-plata-hits-5bln-valuation-after-405m-funding-round-a92520"
+        "source": "https://www.themoscowtimes.com/2026/04/16/tinkov-founded-fintech-plata-hits-5bln-valuation-after-405m-funding-round-a92520",
+        "background": true
       },
       {
         "fact": "Plata is privately held; shareholders are considering an IPO, but no listing date has been announced.",
@@ -486,6 +506,34 @@
         "source": "https://retailboss.co/pop-mart-opens-three-storey-flagship-on-pariss-boulevard-haussmann"
       },
       {
+        "fact": "Pop Mart's third-quarter 2026 revenue fell 45% to 50% year on year, with the steepest drop in the Americas (70% to 75%), as demand for Labubu cooled.",
+        "date": "2026-10-27",
+        "importance": "high",
+        "source": [
+          {
+            "title": "Labubu-maker Pop Mart's shares extend declines as third-quarter sales plunge",
+            "url": "https://www.cnbc.com/2026/10/28/labubu-pop-mart-third-quarter-earnings.html"
+          },
+          {
+            "title": "Pop Mart sales fall up to 50% as Labubu fever ebbs",
+            "url": "https://www.ft.com/content/0025f8af-d34a-4170-bbae-31dce32e45c6",
+            "paywall": true,
+            "note": "Financial Times, subscription required."
+          }
+        ]
+      },
+      {
+        "fact": "Pop Mart shares fell after the results, down more than 30% for the year.",
+        "date": "2026-10-28",
+        "importance": "medium",
+        "source": [
+          {
+            "title": "Labubu-maker Pop Mart's shares extend declines as third-quarter sales plunge",
+            "url": "https://www.cnbc.com/2026/10/28/labubu-pop-mart-third-quarter-earnings.html"
+          }
+        ]
+      },
+      {
         "fact": "Pop Mart is expanding its physical stores in 2026, including more than 20 Simon malls and outlet centers in the US.",
         "importance": "medium",
         "source": "https://chainstoreage.com/pop-mart-plots-2026-growth-heres-where"
@@ -497,7 +545,7 @@
   },
   {
     "id": "kelloggs",
-    "description": "Ambiguous brand: since the split, Kellogg's brands belong to WK Kellogg Co (Ferrero) and Kellanova (Mars).",
+    "description": "Ambiguous brand (WK Kellogg Co / Kellanova) and a namesake (Keith Kellogg, US envoy) that must not appear.",
     "request": {
       "entity_type": "company",
       "name": "Kellogg's",
@@ -508,20 +556,22 @@
     },
     "expected_facts": [
       {
-        "fact": "Ferrero completed its acquisition of WK Kellogg Co (North American cereals).",
-        "date": "2025-09-26",
+        "fact": "Kellogg's changed the UK recipe of Rice Krispies and Coco Pops (corn and rice flour instead of whole rice grains), citing weather-hit grain supplies, and admitted the 'snap, crackle and pop' may be quieter after customer complaints.",
+        "date": "2026-11-04",
         "importance": "high",
-        "source": "https://www.foodbusinessnews.net/articles/29090-its-a-wrap-ferrero-completes-wk-kellogg-acquisition"
-      },
-      {
-        "fact": "Mars completed its acquisition of Kellanova (Pringles, Pop-Tarts and Kellogg's brands outside North America).",
-        "date": "2025-12-11",
-        "importance": "high",
-        "source": "https://whoistheownerof.com/who-is-the-owner-of-kelloggs-cereal-brands/"
+        "source": [
+          {
+            "title": "Kellogg's admits snap, crackle and pop is quieter after uproar over Rice Krispies recipe change",
+            "url": "https://www.bbc.com/news/articles/cqvg0y44ym7vo"
+          }
+        ]
       }
     ],
     "expected_gaps": [
       "'Kellogg's' is ambiguous: the brands are split between WK Kellogg Co (owned by Ferrero) and Kellanova (owned by Mars), so the counterpart must be confirmed."
+    ],
+    "must_not_contain": [
+      "Keith Kellogg"
     ]
   },
   {
@@ -543,16 +593,41 @@
         "source": "https://www.bloomberg.com/news/articles/2026-10-27/bending-spoons-seeks-1-5-billion-in-debt-to-fund-acquisitions"
       },
       {
-        "fact": "Berkshire Hathaway increased its investment in Bending Spoons by more than $300 million.",
-        "date": "2026-10-17",
+        "fact": "Berkshire Hathaway completed a further $330 million investment in Bending Spoons (10 million shares at $33), raising its stake to about 4%.",
+        "date": "2026-10-29",
         "importance": "medium",
-        "source": "https://www.cnbc.com/2026/10/17/bending-spoons-wants-to-revive-software-castoffs-berkshire-investing.html"
+        "source": [
+          {
+            "title": "Berkshire Hathaway completes further $330 million investment in Bending Spoons",
+            "url": "https://investors.bendingspoons.com/newsroom/berkshire-completes-bending-spoons-investment"
+          },
+          {
+            "title": "Bending Spoons wants to revive software castoffs. Berkshire investing",
+            "url": "https://www.cnbc.com/2026/10/17/bending-spoons-wants-to-revive-software-castoffs-berkshire-investing.html"
+          }
+        ]
       },
       {
-        "fact": "Bending Spoons agreed to acquire Miro at an enterprise value of $1.355 billion.",
-        "date": "2026-09-10",
+        "fact": "Bending Spoons completed its all-cash acquisition of Miro.",
+        "date": "2026-10-26",
         "importance": "medium",
-        "source": "https://investors.bendingspoons.com/newsroom/bending-spoons-agrees-to-acquire-miro"
+        "source": [
+          {
+            "title": "Bending Spoons completes the acquisition of Miro",
+            "url": "https://investors.bendingspoons.com/newsroom/bending-spoons-completes-the-acquisition-of-miro"
+          }
+        ]
+      },
+      {
+        "fact": "Bending Spoons will report its third-quarter 2026 results on 20 November 2026.",
+        "date": "2026-11-06",
+        "importance": "low",
+        "source": [
+          {
+            "title": "Bending Spoons to announce Q3 2026 results",
+            "url": "https://investors.bendingspoons.com/newsroom/bending-spoons-to-announce-q3-results"
+          }
+        ]
       }
     ]
   }

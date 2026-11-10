@@ -393,6 +393,23 @@ def test_meetings_expand_into_cases_with_their_own_kinds(tmp_path):
     assert after["expected_facts"][1]["importance_label"] == "medium"
 
 
+def test_dataset_rejects_facts_older_than_the_window(tmp_path):
+    old = {"fact": "Old news", "date": "2026-09-01"}
+    path = _write_dataset(tmp_path, [_raw_case(expected_facts=[old])])
+    with pytest.raises(SystemExit, match="69 days before the meeting"):
+        run_eval.load_dataset(path)
+
+    # Allowed when marked as background on purpose, or for one meeting.
+    path = _write_dataset(tmp_path, [_raw_case(
+        expected_facts=[{**old, "background": True}])])
+    assert run_eval.load_dataset(path)[0]["expected_facts"][0]["kind"] == \
+        "background"
+    raw = _raw_case(id="late", expected_facts=[old])
+    del raw["request"]["meeting_datetime"]
+    raw["meetings"] = [{"datetime": MEETING, "allow_old_facts": True}]
+    assert run_eval.load_dataset(_write_dataset(tmp_path, [raw]))
+
+
 @pytest.mark.parametrize("fact, message", [
     ({"fact": "x", "kind": "recent"}, "remove 'kind'"),
     ({"fact": "x", "importance": 0.9}, "importance must be one of"),
