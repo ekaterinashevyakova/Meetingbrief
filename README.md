@@ -10,7 +10,7 @@ Enter a company or person, a meeting time and an optional objective to prepare a
 
 The hosted application is deployed from `main` and currently uses fictional demonstration data. It does not automatically include changes made in other branches.
 
-This branch, `katya/frontend-integration`, combines the updated frontend with the Tavily and Bifrost workflow. Demo mode and mode switching have been manually checked. End-to-end Live operation in this combined branch is pending verification with a configured Bifrost instance.
+This branch, `katya/frontend-integration`, combines the updated frontend with the Tavily and Bifrost workflow. Demo mode and mode switching have been manually checked. The Live demo video was recorded from this branch using `openai/gpt-oss-20b` served by Groq through Bifrost.
 
 ## Demo and Live modes
 
@@ -163,14 +163,14 @@ Completed manual frontend checks include fictional result display, empty results
 
 Still required:
 
-- Verify this combined branch with real Tavily and Bifrost calls.
+- Reproduce the recorded Live workflow in a clean environment.
 - Forward research collection metadata in every result path.
 - Verify claim support, entity identity, event dates and research-window compliance.
 - Test real source timestamps, missing dates and conflicting information.
 - Investigate the reported loading indicator after Streamlit's built-in Stop action; reliable cancellation is not implemented or verified.
 - Recheck reset, export and narrow-window layout after integration.
 - Reproduce the setup on another team member's computer.
-- Prepare the final demo video and submission materials.
+- Add the demo video link when it is available.
 
 Do not treat the current structural validation as a factual verification system.
 
