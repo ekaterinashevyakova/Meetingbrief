@@ -913,6 +913,50 @@ def test_history_row_waits_while_file_is_open(tmp_path, monkeypatch):
     assert not pending.exists()
 
 
+def _timed_entry(run, seconds, tavily, llm, judge):
+    backend = [{"stage": "tavily", "seconds": tavily}]
+    if llm:
+        backend.append({"stage": "generation", "seconds": llm})
+    return {"id": "t", "run": run, "seconds": seconds, "failures": [],
+            "warnings": [], "usage": {
+                "backend": backend,
+                "judge": [{"stage": "judge:facts", "seconds": judge}] if judge else []}}
+
+
+def test_mean_times_skip_runs_where_the_step_did_not_run():
+    report = [
+        _timed_entry(1, 40.0, 5.0, 35.0, 60.0),
+        _timed_entry(2, 20.0, 5.0, 15.0, 40.0),
+        _timed_entry(3, 4.0, 4.0, 0, 0),      # no sources: no generation, no judge
+        _timed_entry(4, 0.0, 0.0, 0, 0),      # nothing to search
+    ]
+    assert run_eval.mean_times(report) == {
+        "backend_s": 21.3, "tavily_s": 4.7, "llm_s": 25.0,
+        "fetch_s": None, "judge_s": 50.0}
+
+
+def test_summary_total_row_shows_mean_time_and_total_cost(tmp_path):
+    openpyxl = pytest.importorskip("openpyxl")
+    report = [_timed_entry(1, 40.0, 5.0, 35.0, 60.0),
+              _timed_entry(2, 0.0, 0.0, 0, 0)]
+    args = types.SimpleNamespace(from_cache=None, backend="fake",
+                                 dataset="ds.json")
+    info = run_eval.build_run_info(args, None, report,
+                                   run_eval.datetime.now().astimezone(), 50.0,
+                                   tmp_path)
+    assert info["backend_s"] == 40.0 and info["mean_backend_s"] == 40.0
+    path = tmp_path / "report.xlsx"
+    run_eval.write_xlsx(path, info, report)
+    summary = openpyxl.load_workbook(path)["Summary"]
+    header = [c.value for c in summary[1]]
+    total = {h: c.value for h, c in zip(header, summary[summary.max_row])}
+    assert total["id"] == "TOTAL / MEAN"
+    assert total["backend_s"] == 40.0     # mean over the run that did work
+    assert total["tavily_searches"] == 2  # counts stay totals
+    run_sheet = dict(openpyxl.load_workbook(path)["Run"].iter_rows(values_only=True))
+    assert run_sheet["mean_judge_s"] == 60.0
+
+
 def test_write_xlsx_and_history(tmp_path, monkeypatch):
     openpyxl = pytest.importorskip("openpyxl")
     report = [_report_entry()]

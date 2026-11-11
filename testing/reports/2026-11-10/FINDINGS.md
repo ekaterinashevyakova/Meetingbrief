@@ -17,42 +17,42 @@ Unit tests (`app_test.py`, backend tests against the integration branch): **96 p
 
 **2 OK, 13 with issues, 4 failed.**
 
-| Mean score | Value |
-|---|---|
-| Fact recall (weighted) | 0.49 |
-| Groundedness (events supported by sources) | 0.60 |
-| Summary supported by sources | 0.63 |
-| Event date accuracy | 0.79 |
-| Events inside the 30-day window | 0.67 |
-| Entity precision (right company or person) | 0.95 |
-| Event relevance to the goal (1–5) | 3.47 |
-| Excerpts found on the source page | 0.90 |
-| Facts from after the meeting (leaks) | 0 |
-| Overall score (1–5) | 3.47 |
+| Mean score                                 | Value |
+| ------------------------------------------ | ----- |
+| Fact recall (weighted)                     | 0.49  |
+| Groundedness (events supported by sources) | 0.60  |
+| Summary supported by sources               | 0.63  |
+| Event date accuracy                        | 0.79  |
+| Events inside the 30-day window            | 0.67  |
+| Entity precision (right company or person) | 0.95  |
+| Event relevance to the goal (1–5)         | 3.47  |
+| Excerpts found on the source page          | 0.90  |
+| Facts from after the meeting (leaks)       | 0     |
+| Overall score (1–5)                       | 3.47  |
 
 ## Per case
 
-| Case | recall | grounded | dates | entity | in window | relevance | summary ok | overall | Verdict |
-|---|---|---|---|---|---|---|---|---|---|
-| test_001 OpenAI | 0 | 0.5 | 0.62 | 0.88 | 0.6 | 3.12 | no | 4 | FAIL |
-| test_002 Sam Altman (Disney), hire | 0.62 | 1 | 1 | 0.5 | – | 3.5 | yes | 3 | FAIL |
-| test_003 Sam Altman (Disney), project | 0 | – | – | – | – | – | yes | 3 | ISSUES |
-| test_004 made-up company | – | – | – | – | – | – | yes | 3 | OK |
-| test_005 made-up person | – | – | – | – | – | – | yes | 4 | OK |
-| test_006 IKEA | 0.33 | 1 | 1 | 1 | 0.5 | 2.86 | no | 4 | FAIL |
-| gordeliy | 0 | – | – | – | – | – | yes | 2 | ISSUES |
-| fei_fei_li | 0.53 | 0.5 | 1 | 1 | 1 | 3.5 | no | 4 | ISSUES |
-| jensen_huang@2026-10-20 (before the news) | 1 | 0.67 | 1 | 1 | 0.67 | 2 | yes | 3 | ISSUES, no leak |
-| jensen_huang@2026-11-09 | 1 | 0.62 | 0.75 | 1 | 0.67 | 4.12 | no | 4 | ISSUES |
-| jensen_huang@2026-11-12 | 1 | 0.62 | 0.75 | 1 | 0.83 | 4.12 | no | 4 | ISSUES |
-| jensen_huang@2026-12-04 | 1 | 0.5 | 0.75 | 1 | 0.86 | 4.25 | yes | 4 | ISSUES |
-| jensen_huang@2027-01-20 (window in the future) | 0 | – | – | – | – | – | yes | 2 | ISSUES |
-| gelfand | 0 | – | – | – | – | – | yes | 3 | ISSUES |
-| plata | 0.69 | 0.4 | 0.8 | 1 | 0.4 | 4.6 | yes | 4 | ISSUES |
-| michelin | 0 | 0 | 0 | 1 | – | 2 | no | 3 | ISSUES |
-| pop_mart | 0.19 | 1 | 0.8 | 1 | 1 | 3.8 | no | 4 | ISSUES |
-| kelloggs | 1 | 0 | 0.75 | 1 | 0.5 | 3.25 | yes | 4 | ISSUES |
-| bending_spoons | 1 | 1 | 1 | 1 | 0.33 | 4 | yes | 4 | FAIL |
+| Case                                           | recall | grounded | dates | entity | in window | relevance | summary ok | overall | Verdict         |
+| ---------------------------------------------- | ------ | -------- | ----- | ------ | --------- | --------- | ---------- | ------- | --------------- |
+| test_001 OpenAI                                | 0      | 0.5      | 0.62  | 0.88   | 0.6       | 3.12      | no         | 4       | FAIL            |
+| test_002 Sam Altman (Disney), hire             | 0.62   | 1        | 1     | 0.5    | –        | 3.5       | yes        | 3       | FAIL            |
+| test_003 Sam Altman (Disney), project          | 0      | –       | –    | –     | –        | –        | yes        | 3       | ISSUES          |
+| test_004 made-up company                       | –     | –       | –    | –     | –        | –        | yes        | 3       | OK              |
+| test_005 made-up person                        | –     | –       | –    | –     | –        | –        | yes        | 4       | OK              |
+| test_006 IKEA                                  | 0.33   | 1        | 1     | 1      | 0.5       | 2.86      | no         | 4       | FAIL            |
+| gordeliy                                       | 0      | –       | –    | –     | –        | –        | yes        | 2       | ISSUES          |
+| fei_fei_li                                     | 0.53   | 0.5      | 1     | 1      | 1         | 3.5       | no         | 4       | ISSUES          |
+| jensen_huang@2026-10-20 (before the news)      | 1      | 0.67     | 1     | 1      | 0.67      | 2         | yes        | 3       | ISSUES, no leak |
+| jensen_huang@2026-11-09                        | 1      | 0.62     | 0.75  | 1      | 0.67      | 4.12      | no         | 4       | ISSUES          |
+| jensen_huang@2026-11-12                        | 1      | 0.62     | 0.75  | 1      | 0.83      | 4.12      | no         | 4       | ISSUES          |
+| jensen_huang@2026-12-04                        | 1      | 0.5      | 0.75  | 1      | 0.86      | 4.25      | yes        | 4       | ISSUES          |
+| jensen_huang@2027-01-20 (window in the future) | 0      | –       | –    | –     | –        | –        | yes        | 2       | ISSUES          |
+| gelfand                                        | 0      | –       | –    | –     | –        | –        | yes        | 3       | ISSUES          |
+| plata                                          | 0.69   | 0.4      | 0.8   | 1      | 0.4       | 4.6       | yes        | 4       | ISSUES          |
+| michelin                                       | 0      | 0        | 0     | 1      | –        | 2         | no         | 3       | ISSUES          |
+| pop_mart                                       | 0.19   | 1        | 0.8   | 1      | 1         | 3.8       | no         | 4       | ISSUES          |
+| kelloggs                                       | 1      | 0        | 0.75  | 1      | 0.5       | 3.25      | yes        | 4       | ISSUES          |
+| bending_spoons                                 | 1      | 1        | 1     | 1      | 0.33      | 4         | yes        | 4       | FAIL            |
 
 A dash means the score does not apply. For example, there is no groundedness when the briefing has no events.
 
@@ -86,7 +86,7 @@ A dash means the score does not apply. For example, there is no groundedness whe
 6. **Scientists are not found.** Gordeliy, Gelfand and one Sam Altman case get zero sources even with a working network. Tavily news search does not find publications or institute pages, so a recent Nature Communications paper and the 2026 Nobel Prize for channelrhodopsins are both missed. Research meetings need a different source (Google Scholar, PubMed, lab pages), or a wider window for background.
 7. **"Nothing found" cannot be told apart from a failed search.** During the network problems, Tavily returned zero usable results for IKEA and Plata. On a rerun it returned 9 and 8. In both situations the user sees "The search found no usable sources", which reads as "there is no news". A retry on zero results, and a different message when the search itself fails, would help.
 
-### Evaluation (Dilyara)
+### Evaluation (Diliara)
 
 8. **Running each case once is not enough.** In an earlier run with 3 repeats, `overall_score` for OpenAI ranged from 2 to 4. Use `--runs 3` when comparing backend versions.
 9. **Many source sites block automatic page fetches** (403 and 502 errors), so for those sources the judge falls back to the backend's text. The `sources_unreachable` column shows how often this happened.

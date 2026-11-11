@@ -1221,6 +1221,22 @@ def entry_usage(entry):
 
 
 USAGE_COLUMNS = list(entry_usage({}).keys())
+TIME_COLUMNS = ("backend_s", "tavily_s", "llm_s", "fetch_s", "judge_s")
+
+
+def mean_times(report):
+    """Mean seconds per run for each step, over the runs where it ran.
+
+    A run where a step did not run records 0 (no sources, so no generation;
+    a meeting with nothing to search; no --judge). Those runs are left out,
+    so they do not pull the mean down. None when no run had the step.
+    """
+    usages = [entry_usage(e) for e in report]
+    means = {}
+    for key in TIME_COLUMNS:
+        values = [u[key] for u in usages if u[key]]
+        means[key] = round(sum(values) / len(values), 1) if values else None
+    return means
 
 
 def mean_scores(report):
@@ -1266,6 +1282,7 @@ def build_run_info(args, judge, report, started_at, wall_seconds, out_dir,
         "wall_s": round(wall_seconds, 1),
         **{key: round(value, 4) if isinstance(value, float) else value
            for key, value in totals.items()},
+        **{f"mean_{key}": value for key, value in mean_times(report).items()},
         "report_dir": str(out_dir),
     }
 
@@ -1275,6 +1292,12 @@ def print_totals(info):
           f"(Tavily {info['tavily_s']}s in {info['tavily_searches']} "
           f"searches, LLM {info['llm_s']}s) · source fetch "
           f"{info['fetch_s']}s · judge {info['judge_s']}s")
+    means = {k: info.get(f"mean_{k}") for k in TIME_COLUMNS}
+    print("Mean per run (runs where the step ran): " + " · ".join(
+        f"{label} {means[k]}s" for k, label in (
+            ("backend_s", "backend"), ("tavily_s", "Tavily"), ("llm_s", "LLM"),
+            ("fetch_s", "source fetch"), ("judge_s", "judge"))
+        if means[k] is not None))
     print(f"Tokens: generation {info['gen_input_tokens']:,} in / "
           f"{info['gen_output_tokens']:,} out · judge "
           f"{info['judge_input_tokens']:,} in / "
@@ -1645,6 +1668,7 @@ def _last_line(text):
 
 def write_xlsx(path, run_info, report, unit=None):
     from openpyxl import Workbook
+    from openpyxl.comments import Comment
     from openpyxl.styles import Alignment, Font, PatternFill
 
     wb = Workbook()
@@ -1664,6 +1688,8 @@ def write_xlsx(path, run_info, report, unit=None):
             *[usage[k] for k in USAGE_COLUMNS],
         ])
     means = mean_scores(report)
+    times = mean_times(report)
+    # Scores and time: mean per run. Counts, tokens and cost: totals.
     rows.append([
         "TOTAL / MEAN", "", f"{run_info['passed']}/{len(report)} passed",
         "", run_info["overview"],
@@ -1671,7 +1697,7 @@ def write_xlsx(path, run_info, report, unit=None):
         sum(len(e["warnings"]) for e in report),
         run_info["judge_errors"] or "",
         *[means[k] for k in SCORE_KEYS],
-        *[run_info[k] for k in USAGE_COLUMNS],
+        *[times[k] if k in times else run_info[k] for k in USAGE_COLUMNS],
     ])
     summary = _add_sheet(
         wb, "Summary",
@@ -1680,7 +1706,12 @@ def write_xlsx(path, run_info, report, unit=None):
         rows)
     for cell in summary[summary.max_row]:
         cell.font = Font(bold=True)
-    fills = {"OK": "C6EFCE", "ISSUES": "FFEB9C", "FAIL": "FFC7CE"}
+    header = [c.value for c in summary[1]]
+    for key in TIME_COLUMNS:
+        summary.cell(row=summary.max_row, column=header.index(key) + 1).comment = (
+            Comment("Mean seconds per run, over the runs where this step ran. "
+                    "Totals are in the Run sheet.", "run_eval"))
+    fills ={"OK": "C6EFCE", "ISSUES": "FFEB9C", "FAIL": "FFC7CE"}
     for row in summary.iter_rows(min_row=2, min_col=4, max_col=4):
         color = fills.get(row[0].value)
         if color:

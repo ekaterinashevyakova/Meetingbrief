@@ -22,7 +22,11 @@ Every run writes to `results/<timestamp>/`:
 - `report.json`: checks, judge verdicts, scores and usage per run.
 - `report.xlsx` (another path with `--xlsx PATH`):
   - `Summary`: one row per case and run (status, scores, time, tokens,
-    estimated cost) and a total / mean row. `verdict` is `OK` (green),
+    estimated cost) and a total / mean row. In that row, scores and time
+    columns are means per run, and counts, tokens and cost are totals. A
+    time mean only counts the runs where that step ran: a run with no
+    sources has no generation, and a meeting with nothing to search takes
+    0 seconds, so neither pulls the mean down. `verdict` is `OK` (green),
     `ISSUES` (yellow: checks passed, but the judge or the source check
     found problems) or `FAIL` (red: a check failed or something raised).
     `comments` says in plain words what is broken (with the event, claim or
@@ -43,14 +47,19 @@ Every run writes to `results/<timestamp>/`:
     spread and standard deviation. Use `--runs 3` or more. Scores that
     move by 0.3 or more (0–1 scale) or 1.5 or more (1–5 scale) are listed as
     unstable in the run overview;
-  - `Run`: models, settings and totals.
+  - `Run`: models, settings and totals. Time is given both as the total
+    (`backend_s`, `tavily_s`, `llm_s`, `fetch_s`, `judge_s`) and as the
+    mean per run (`mean_backend_s` and so on, computed the same way as in
+    `Summary`).
 
 Each run also appends one row (settings, mean scores, unit test counts,
-totals) to `results/history.xlsx`, to compare runs over time. If the file is
+totals, mean time per run) to `results/history.xlsx`, to compare runs over
+time. If the file is
 open in Excel, the row waits in `results/history_pending.json` and is added
 on the next run.
 
-Time is split into Tavily search, generation and judge. Backend steps are
+Time is split into Tavily search, generation and judge. `backend_s` is
+the full `generate_briefing()` call, the time a user waits. Backend steps are
 timed by wrapping the backend module's `search_sources()` and
 `generate_text()`. Generation tokens come from the LLM client's optional
 `pop_usage()` (`anthropic_client` or `bifrost_client`); without it the token
