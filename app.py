@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 import streamlit as st
 
-from demo_data import generate_briefing
+from demo_data import generate_briefing as generate_demo_briefing
 
 
 st.set_page_config(
@@ -124,6 +124,29 @@ def research_context(request, result):
 
     return lines
 
+def source_date_details(source):
+    """Keep the source publication/update date separate from event dates."""
+    value = source.get("published_date")
+    if isinstance(value, str) and value.strip():
+        reported_date = value.strip()
+    else:
+        reported_date = "Not provided"
+
+    note = source.get("published_date_note")
+    if not isinstance(note, str) or not note.strip():
+        note = (
+            "This source date is not the event date. "
+            "It may refer to publication or a later page update."
+            if reported_date != "Not provided"
+            else "The source publication/update date is unavailable."
+        )
+
+    return [
+        f"Reported publication/update date: {reported_date}",
+        f"Date note: {note.strip()}",
+    ]
+
+
 def export_briefing(request, result):
     meeting = datetime.fromisoformat(request["meeting_datetime"])
 
@@ -189,6 +212,7 @@ def export_briefing(request, result):
             "",
             f"### {source['id']} — {source['title']}",
             safe_url(source.get("url")) or "No source link available.",
+            *source_date_details(source),
             "Supporting excerpt:",
             source.get("excerpt") or "No excerpt provided.",
         ])
@@ -281,7 +305,10 @@ def render_briefing(request, result):
                 st.link_button(f"Open {source['id']}", url)
             else:
                 st.caption("No source link available.")
-            st.write(source.get("excerpt") or "No excerpt provided.")
+            for line in source_date_details(source):
+                st.caption(line)
+            st.write("Supporting excerpt:")
+            st.text(source.get("excerpt") or "No excerpt provided.")
             st.divider()
 
     download_column, reset_column = st.columns(2)
@@ -310,13 +337,28 @@ st.caption(
     "Recent developments, useful questions and traceable sources "
     "in one concise briefing."
 )
-st.info("Demo mode · Live web research and AI are not connected yet.")
 
 if "briefing" not in st.session_state:
     st.session_state.briefing = None
 
 if "form_version" not in st.session_state:
     st.session_state.form_version = 0
+
+mode = st.radio(
+    "Briefing mode",
+    ["Demo", "Live"],
+    horizontal=True,
+    key="briefing_mode",
+    on_change=reset_meeting,
+)
+
+if mode == "Demo":
+    st.info("Demo mode · Fictional examples. No API requests are made.")
+else:
+    st.info(
+        "Live mode · Uses Tavily and your configured Bifrost gateway. "
+        "API usage may incur costs."
+    )
 
 form_column, result_column = st.columns([2, 3], gap="large")
 
@@ -336,6 +378,7 @@ with form_column:
     with st.form(form_key):
         name = st.text_input(
             "Company name" if is_company else "Full name",
+            max_chars=150,
             placeholder="e.g. Inter IKEA Systems B.V."
             if is_company
             else "e.g. Jane Smith",
@@ -355,6 +398,7 @@ with form_column:
             "Company website (optional)"
             if is_company
             else "Company or role (optional)",
+            max_chars=300,
             placeholder="https://www.ikea.com"
             if is_company
             else "Marketing Director at Example Company",
@@ -369,13 +413,17 @@ with form_column:
                 "after the meeting."
             ),
         )
-        meeting_time = st.time_input("Meeting time")
+        meeting_time = st.time_input(
+            "Meeting time",
+            value=time(12, 0),
+        )
         timezone = st.selectbox(
             "Time zone",
             ["Europe/Rome", "Europe/Moscow", "UTC"],
         )
         goal = st.text_area(
             "Meeting objective (optional)",
+            max_chars=500,
             placeholder="Discuss a potential partnership",
         )
         submitted = st.form_submit_button(
@@ -386,6 +434,12 @@ with form_column:
     if submitted:
         if not name.strip():
             st.warning("Please enter a company name or person's name.")
+        elif len(name) > 150:
+            st.warning("Company name or person's name must be 150 characters or fewer.")
+        elif len(details) > 300:
+            st.warning("Website, company or role must be 300 characters or fewer.")
+        elif len(goal) > 500:
+            st.warning("Meeting objective must be 500 characters or fewer.")
         else:
             meeting = datetime.combine(
                 meeting_date,
@@ -403,7 +457,15 @@ with form_column:
 
             try:
                 with st.spinner("Preparing your briefing..."):
-                    result = generate_briefing(request)
+                    if mode == "Demo":
+                        result = generate_demo_briefing(request)
+                    else:
+                        from briefing_generator import (
+                            generate_briefing as generate_live_briefing,
+                        )
+
+                        result = generate_live_briefing(request)
+
                     validate_result(result)
 
                 st.session_state.briefing = {
@@ -429,9 +491,15 @@ with result_column:
             st.write("Recent developments with source references")
             st.write("Questions and conversation starters")
             st.write("Information gaps and supporting excerpts")
-        st.caption(
-            "The current demo uses fictional examples. "
-            "No research is performed."
-        )
+        if mode == "Demo":
+            st.caption(
+                "The current demo uses fictional examples. "
+                "No research is performed."
+            )
+        else:
+            st.caption(
+                "Live mode requires your local research and model "
+                "configuration. Research starts only when you submit."
+            )
     else:
         render_briefing(saved["request"], saved["result"])
